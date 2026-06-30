@@ -124,50 +124,93 @@ export default function VerifyPage(): JSX.Element {
   const isComplete: boolean = otp.join('').length === OTP_LENGTH
 
   return (
-    <div className='min-h-screen bg-bg-base flex items-center justify-center p-4 relative overflow-hidden'>
-      {/* Ambient orbs */}
+    <div
+      className='min-h-screen flex items-center justify-center p-4 relative overflow-hidden'
+      style={{ background: 'var(--bg-base)' }}
+    >
+      {/* ── Ambient orbs ── */}
       <div className='pointer-events-none absolute inset-0 overflow-hidden'>
         <div
-          className='absolute -top-28 -left-24 h-72 w-72 rounded-full
-                        bg-rose-200/40 blur-[90px] animate-[orbFloat_13s_ease-in-out_infinite]'
+          className='absolute -top-28 -left-24 h-72 w-72 rounded-full blur-[90px] opacity-30
+                     animate-[orbFloat_13s_ease-in-out_infinite]'
+          style={{ background: 'var(--pink-200)' }}
         />
         <div
-          className='absolute -bottom-24 -right-16 h-80 w-80 rounded-full
-                        bg-rose-300/25 blur-[100px] animate-[orbFloat_11s_ease-in-out_1.5s_infinite_reverse]'
+          className='absolute -bottom-24 -right-16 h-80 w-80 rounded-full blur-[100px] opacity-20
+                     animate-[orbFloat_11s_ease-in-out_1.5s_infinite_reverse]'
+          style={{ background: 'var(--pink-300)' }}
         />
       </div>
 
       <div className='relative z-10 w-full max-w-md stagger-children'>
-        {/* Logo */}
+        {/* ── Logo ── */}
         <div className='text-center mb-8'>
           <div
-            className='inline-flex items-center justify-center w-14 h-14
-                          rounded-full bg-rose-100 mb-4
-                          animate-[pulseRing_2.5s_ease-in-out_infinite]'
+            className='inline-flex items-center justify-center w-14 h-14 rounded-full mb-4
+                       animate-[pulseRing_2.5s_ease-in-out_infinite]'
+            style={{
+              background: 'var(--pink-100)',
+              color: 'var(--pink-400)',
+            }}
           >
-            <ShieldIcon size={26} className='text-rose-400' />
+            <ShieldIcon size={26} />
           </div>
-          <p className='text-[11px] font-semibold uppercase tracking-[0.22em] text-rose-500 mb-1'>
+          <p
+            className='text-[11px] font-semibold uppercase tracking-[0.22em] mb-1'
+            style={{ fontFamily: 'var(--font-sans)', color: 'var(--pink-400)' }}
+          >
             Verification
           </p>
-          <h1 className='font-serif text-[32px] text-ink-900'>
+          <h1
+            className='text-[32px]'
+            style={{ fontFamily: 'var(--font-serif)', color: 'var(--ink-900)' }}
+          >
             Check your email
           </h1>
         </div>
 
+        {/* ── Card ── */}
         <div
-          className='bg-bg-surface border border-rose-100 rounded-2xl p-8
-                        shadow-[var(--shadow-card)]'
+          className='rounded-2xl p-8'
+          style={{
+            background: 'var(--bg-surface)',
+            border: '1px solid var(--pink-100)',
+            boxShadow: 'var(--shadow-card)',
+          }}
         >
           {/* Email display */}
           <div
-            className='flex items-center gap-3 bg-rose-50/60 border border-rose-100
-                          rounded-xl px-4 py-3 mb-8'
+            className='flex items-center gap-3 rounded-xl px-4 py-3 mb-8'
+            style={{
+              background: 'var(--pink-50)',
+              border: '1px solid var(--pink-100)',
+            }}
           >
-            <MailIcon size={18} className='text-rose-400 flex-shrink-0' />
+            <span
+              className='flex-shrink-0'
+              style={{ color: 'var(--pink-400)' }}
+            >
+              <MailIcon size={18} />
+            </span>
             <div>
-              <p className='text-xs text-ink-400'>Code sent to</p>
-              <p className='text-sm font-medium text-ink-900'>{email}</p>
+              <p
+                className='text-xs'
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  color: 'var(--ink-400)',
+                }}
+              >
+                Code sent to
+              </p>
+              <p
+                className='text-sm font-medium'
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  color: 'var(--ink-900)',
+                }}
+              >
+                {email}
+              </p>
             </div>
           </div>
 
@@ -187,15 +230,32 @@ export default function VerifyPage(): JSX.Element {
                   onChange={(e) => handleChange(i, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(i, e)}
                   onPaste={handlePaste}
-                  className={`w-12 h-14 text-center text-xl font-semibold rounded-xl
-                              border transition-all duration-150 outline-none
-                              text-ink-900 bg-rose-50/60
-                              focus:scale-[1.04] focus:shadow-[0_0_0_3px_rgba(201,168,76,0.15)]
-                              ${
-                                digit
-                                  ? 'border-rose-400 bg-rose-50'
-                                  : 'border-rose-100 focus:border-gold-400'
-                              }`}
+                  className='w-12 h-14 text-center text-xl font-semibold rounded-xl
+                             transition-all duration-150 outline-none
+                             focus:scale-[1.04]'
+                  style={{
+                    fontFamily: 'var(--font-serif)',
+                    color: 'var(--ink-900)',
+                    background: digit ? 'var(--pink-100)' : 'var(--pink-50)',
+                    border: `1px solid ${digit ? 'var(--pink-400)' : 'var(--pink-100)'}`,
+                    boxShadow: digit
+                      ? '0 0 0 3px rgba(196, 56, 138, 0.12)'
+                      : 'none',
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--pink-300)'
+                    e.currentTarget.style.boxShadow =
+                      '0 0 0 3px rgba(196, 56, 138, 0.15)'
+                  }}
+                  onBlur={(e) => {
+                    const d = otp[i]
+                    e.currentTarget.style.borderColor = d
+                      ? 'var(--pink-400)'
+                      : 'var(--pink-100)'
+                    e.currentTarget.style.boxShadow = d
+                      ? '0 0 0 3px rgba(196, 56, 138, 0.12)'
+                      : 'none'
+                  }}
                 />
               ))}
             </div>
@@ -203,18 +263,43 @@ export default function VerifyPage(): JSX.Element {
             {/* Error */}
             {error && (
               <div
-                className='bg-red-50 border border-red-100 rounded-xl
-                              px-3 py-2.5 mb-4 animate-[fadeUp_0.25s_ease_both]'
+                className='rounded-xl px-3 py-2.5 mb-4 animate-[fadeUp_0.25s_ease_both]'
+                style={{ background: '#fef2f2', border: '1px solid #fecaca' }}
               >
-                <p className='text-xs text-red-500'>{error}</p>
+                <p className='text-xs' style={{ color: '#b91c1c' }}>
+                  {error}
+                </p>
               </div>
             )}
 
+            {/* Submit */}
             <button
               type='submit'
               disabled={loading || !isComplete}
-              className='btn btn-primary w-full mb-4 hover:-translate-y-px hover:scale-[1.015]
-                         active:scale-[0.97] transition-all duration-200'
+              className='btn btn-lg w-full mb-4 flex items-center justify-center gap-2
+                         transition-all duration-200
+                         hover:-translate-y-px hover:scale-[1.015]
+                         active:scale-[0.97]
+                         disabled:opacity-40 disabled:transform-none'
+              style={{
+                fontFamily: 'var(--font-sans)',
+                background: 'var(--magenta-700)',
+                color: '#ffffff',
+                borderRadius: '99px',
+                boxShadow: 'var(--shadow-card)',
+              }}
+              onMouseEnter={(e) => {
+                if (!loading && isComplete) {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.background = 'var(--magenta-600)'
+                  el.style.boxShadow = 'var(--shadow-soft)'
+                }
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLElement
+                el.style.background = 'var(--magenta-700)'
+                el.style.boxShadow = 'var(--shadow-card)'
+              }}
             >
               {loading ? (
                 <>
@@ -239,7 +324,13 @@ export default function VerifyPage(): JSX.Element {
 
           {/* Resend */}
           <div className='text-center'>
-            <p className='text-sm text-ink-400 mb-1'>
+            <p
+              className='text-sm mb-1'
+              style={{
+                fontFamily: 'var(--font-sans)',
+                color: 'var(--ink-400)',
+              }}
+            >
               Didn&apos;t receive the code?
             </p>
             <button
@@ -247,9 +338,25 @@ export default function VerifyPage(): JSX.Element {
               onClick={handleResend}
               disabled={countdown > 0 || resending}
               className='inline-flex items-center gap-1.5 text-sm font-medium
-                         text-rose-500 hover:text-rose-600 hover:underline
-                         disabled:text-ink-300 disabled:no-underline disabled:cursor-default
-                         transition-colors duration-150'
+                         transition-colors duration-150
+                         disabled:cursor-default'
+              style={{
+                fontFamily: 'var(--font-sans)',
+                color:
+                  countdown > 0 || resending
+                    ? 'var(--ink-300)'
+                    : 'var(--pink-400)',
+              }}
+              onMouseEnter={(e) => {
+                if (countdown === 0 && !resending)
+                  (e.currentTarget as HTMLElement).style.color =
+                    'var(--magenta-600)'
+              }}
+              onMouseLeave={(e) => {
+                if (countdown === 0 && !resending)
+                  (e.currentTarget as HTMLElement).style.color =
+                    'var(--pink-400)'
+              }}
             >
               <span className={resending ? 'animate-spin' : ''}>
                 <RefreshIcon size={14} />
@@ -266,8 +373,15 @@ export default function VerifyPage(): JSX.Element {
           <button
             type='button'
             onClick={() => router.push('/login')}
-            className='flex items-center gap-1.5 text-sm text-ink-300
-                       hover:text-ink-600 transition-colors duration-150 mx-auto mt-6'
+            className='flex items-center gap-1.5 text-sm mx-auto mt-6
+                       transition-colors duration-150'
+            style={{ fontFamily: 'var(--font-sans)', color: 'var(--ink-300)' }}
+            onMouseEnter={(e) =>
+              ((e.currentTarget as HTMLElement).style.color = 'var(--ink-600)')
+            }
+            onMouseLeave={(e) =>
+              ((e.currentTarget as HTMLElement).style.color = 'var(--ink-300)')
+            }
           >
             <ArrowLeftIcon size={14} />
             Back to login

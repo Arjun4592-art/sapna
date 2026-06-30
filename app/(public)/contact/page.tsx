@@ -1,6 +1,5 @@
 import ContactInfo from '@/components/website/contact/ContactInfo'
 import ContactForm from '@/components/website/contact/ContactForm'
-import Footer from '@/components/website/Footer'
 
 export default function ContactPage(): React.JSX.Element {
   return (
@@ -11,7 +10,6 @@ export default function ContactPage(): React.JSX.Element {
           <ContactForm />
         </div>
       </div>
-      <Footer />
     </div>
   )
 }

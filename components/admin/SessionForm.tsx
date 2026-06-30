@@ -18,54 +18,51 @@ import {
   BookIcon,
   CheckIcon,
   ArrowLeftIcon,
+  LinkIcon,
 } from '@/components/icons'
-
-interface IconProps {
-  size?: number
-  className?: string
-  strokeWidth?: number
-}
-
-export function LinkIcon({
-  size = 20,
-  className = '',
-  strokeWidth = 1.5,
-}: IconProps) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox='0 0 24 24'
-      fill='none'
-      stroke='currentColor'
-      strokeWidth={strokeWidth}
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      className={className}
-    >
-      <path d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71' />
-      <path d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71' />
-    </svg>
-  )
-}
 
 interface SessionFormProps {
   initial?: any
   sessionId?: string
 }
 
+// Updated to match Firestore IDs
 const PROGRAMS = [
-  { id: '4-week', label: 'Soul Blueprint Intensive (4-Week)' },
-  { id: '8-week', label: 'Soul Awakening: Empowered You (8-Week)' },
+  { id: 'akashic', label: 'Akashic Record Reading Program' },
+  { id: 'relationship', label: 'Life & Relationship Coaching Program' },
 ]
 
 const STATUS_OPTIONS = ['scheduled', 'completed', 'cancelled']
 
-const fieldIconClass =
-  'pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-300'
+const inputStyle = {
+  border: '1px solid var(--ink-100)',
+  background: 'var(--bg-surface)',
+  color: 'var(--ink-900)',
+  fontFamily: 'var(--font-sans)',
+}
 
 const inputBase =
-  'w-full pl-10 pr-4 py-2.5 rounded-xl border border-ink-100 bg-bg-surface text-ink-900 text-sm font-sans placeholder:text-ink-300 outline-none transition-all duration-200 focus:border-gold-400 focus:shadow-[0_0_0_3px_rgba(201,168,76,0.12)]'
+  'w-full pl-10 pr-4 py-2.5 rounded-xl text-sm placeholder:text-[var(--ink-300)] outline-none transition-all duration-200'
+
+const inputBasePlain =
+  'w-full px-4 py-2.5 rounded-xl text-sm outline-none transition-all duration-200 cursor-pointer'
+
+function focusInput(
+  e: React.FocusEvent<
+    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+  >,
+) {
+  e.currentTarget.style.borderColor = 'var(--pink-300)'
+  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(196, 56, 138, 0.12)'
+}
+function blurInput(
+  e: React.FocusEvent<
+    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+  >,
+) {
+  e.currentTarget.style.borderColor = 'var(--ink-100)'
+  e.currentTarget.style.boxShadow = 'none'
+}
 
 export default function SessionForm({ initial, sessionId }: SessionFormProps) {
   const router = useRouter()
@@ -73,7 +70,7 @@ export default function SessionForm({ initial, sessionId }: SessionFormProps) {
 
   const [form, setForm] = useState({
     title: initial?.title || '',
-    programId: initial?.programId || '4-week',
+    programId: initial?.programId || 'akashic',
     weekNum: initial?.weekNum || 1,
     userId: initial?.userId || '',
     date: initial?.date?.toDate
@@ -138,27 +135,48 @@ export default function SessionForm({ initial, sessionId }: SessionFormProps) {
       <button
         type='button'
         onClick={() => router.back()}
-        className='flex items-center gap-1.5 text-sm text-ink-400 hover:text-ink-900 transition-colors duration-150'
+        className='flex items-center gap-1.5 text-sm transition-colors duration-150'
+        style={{ fontFamily: 'var(--font-sans)', color: 'var(--ink-400)' }}
+        onMouseEnter={(e) =>
+          ((e.currentTarget as HTMLElement).style.color = 'var(--ink-900)')
+        }
+        onMouseLeave={(e) =>
+          ((e.currentTarget as HTMLElement).style.color = 'var(--ink-400)')
+        }
       >
         <ArrowLeftIcon size={15} />
         Back to sessions
       </button>
 
-      <div className='card space-y-5'>
+      {/* Card */}
+      <div
+        className='rounded-2xl p-6 space-y-5'
+        style={{
+          background: 'var(--bg-surface)',
+          border: '1px solid var(--ink-100)',
+          boxShadow: 'var(--shadow-card)',
+        }}
+      >
         {/* Title */}
         <div>
           <label className='input-label'>Session title *</label>
           <div className='relative'>
-            <div className={fieldIconClass}>
+            <div
+              className='pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2'
+              style={{ color: 'var(--ink-300)' }}
+            >
               <CalendarIcon size={16} />
             </div>
             <input
               name='title'
               className={inputBase}
+              style={inputStyle}
               value={form.title}
               onChange={handleChange}
               placeholder='e.g. Week 1 — Responsibility Deep Dive'
               required
+              onFocus={focusInput}
+              onBlur={blurInput}
             />
           </div>
         </div>
@@ -168,14 +186,20 @@ export default function SessionForm({ initial, sessionId }: SessionFormProps) {
           <div>
             <label className='input-label'>Program *</label>
             <div className='relative'>
-              <div className={fieldIconClass}>
+              <div
+                className='pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2'
+                style={{ color: 'var(--ink-300)' }}
+              >
                 <BookIcon size={16} />
               </div>
               <select
                 name='programId'
                 className={`${inputBase} cursor-pointer`}
+                style={inputStyle}
                 value={form.programId}
                 onChange={handleChange}
+                onFocus={focusInput}
+                onBlur={blurInput}
               >
                 {PROGRAMS.map((p) => (
                   <option key={p.id} value={p.id}>
@@ -189,12 +213,15 @@ export default function SessionForm({ initial, sessionId }: SessionFormProps) {
             <label className='input-label'>Week number *</label>
             <select
               name='weekNum'
-              className='w-full px-4 py-2.5 rounded-xl border border-ink-100 bg-bg-surface text-ink-900 text-sm outline-none transition-all duration-200 focus:border-gold-400 cursor-pointer'
+              className={inputBasePlain}
+              style={inputStyle}
               value={form.weekNum}
               onChange={handleChange}
+              onFocus={focusInput}
+              onBlur={blurInput}
             >
               {Array.from(
-                { length: form.programId === '8-week' ? 8 : 4 },
+                { length: form.programId === 'relationship' ? 8 : 4 },
                 (_, i) => (
                   <option key={i + 1} value={i + 1}>
                     Week {i + 1}
@@ -212,19 +239,25 @@ export default function SessionForm({ initial, sessionId }: SessionFormProps) {
             <input
               name='date'
               type='datetime-local'
-              className='w-full px-4 py-2.5 rounded-xl border border-ink-100 bg-bg-surface text-ink-900 text-sm outline-none transition-all duration-200 focus:border-gold-400 cursor-pointer'
+              className={inputBasePlain}
+              style={inputStyle}
               value={form.date}
               onChange={handleChange}
               required
+              onFocus={focusInput}
+              onBlur={blurInput}
             />
           </div>
           <div>
             <label className='input-label'>Status</label>
             <select
               name='status'
-              className='w-full px-4 py-2.5 rounded-xl border border-ink-100 bg-bg-surface text-ink-900 text-sm outline-none transition-all duration-200 focus:border-gold-400 cursor-pointer'
+              className={inputBasePlain}
+              style={inputStyle}
               value={form.status}
               onChange={handleChange}
+              onFocus={focusInput}
+              onBlur={blurInput}
             >
               {STATUS_OPTIONS.map((s) => (
                 <option key={s} value={s}>
@@ -239,18 +272,27 @@ export default function SessionForm({ initial, sessionId }: SessionFormProps) {
         <div>
           <label className='input-label'>Student UID</label>
           <div className='relative'>
-            <div className={fieldIconClass}>
+            <div
+              className='pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2'
+              style={{ color: 'var(--ink-300)' }}
+            >
               <UserIcon size={16} />
             </div>
             <input
               name='userId'
               className={inputBase}
+              style={inputStyle}
               value={form.userId}
               onChange={handleChange}
               placeholder='Firebase user UID (optional for group sessions)'
+              onFocus={focusInput}
+              onBlur={blurInput}
             />
           </div>
-          <p className='text-[11px] text-ink-300 mt-1'>
+          <p
+            className='text-[11px] mt-1'
+            style={{ fontFamily: 'var(--font-sans)', color: 'var(--ink-300)' }}
+          >
             Leave blank for group/open sessions
           </p>
         </div>
@@ -259,15 +301,21 @@ export default function SessionForm({ initial, sessionId }: SessionFormProps) {
         <div>
           <label className='input-label'>Zoom / Meet link</label>
           <div className='relative'>
-            <div className={fieldIconClass}>
+            <div
+              className='pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2'
+              style={{ color: 'var(--ink-300)' }}
+            >
               <LinkIcon size={16} />
             </div>
             <input
               name='zoomLink'
               className={inputBase}
+              style={inputStyle}
               value={form.zoomLink}
               onChange={handleChange}
               placeholder='https://zoom.us/j/...'
+              onFocus={focusInput}
+              onBlur={blurInput}
             />
           </div>
         </div>
@@ -277,10 +325,13 @@ export default function SessionForm({ initial, sessionId }: SessionFormProps) {
           <label className='input-label'>Notes (internal)</label>
           <textarea
             name='notes'
-            className='w-full px-4 py-2.5 rounded-xl border border-ink-100 bg-bg-surface text-ink-900 text-sm font-sans placeholder:text-ink-300 outline-none transition-all duration-200 focus:border-gold-400 focus:shadow-[0_0_0_3px_rgba(201,168,76,0.12)] min-h-[100px] resize-none'
+            className='w-full px-4 py-2.5 rounded-xl text-sm placeholder:text-[var(--ink-300)] outline-none transition-all duration-200 min-h-[100px] resize-none'
+            style={inputStyle}
             value={form.notes}
             onChange={handleChange}
             placeholder='Any notes about this session…'
+            onFocus={focusInput}
+            onBlur={blurInput}
           />
         </div>
       </div>
@@ -290,7 +341,29 @@ export default function SessionForm({ initial, sessionId }: SessionFormProps) {
         <button
           type='submit'
           disabled={loading}
-          className='btn btn-primary flex items-center gap-2 disabled:opacity-40'
+          className='btn inline-flex items-center gap-2 disabled:opacity-40
+                     transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.02]
+                     active:scale-[0.97]'
+          style={{
+            fontFamily: 'var(--font-sans)',
+            background: 'var(--magenta-700)',
+            color: '#ffffff',
+            borderRadius: '99px',
+            padding: '10px 20px',
+            boxShadow: 'var(--shadow-card)',
+          }}
+          onMouseEnter={(e) => {
+            if (!loading) {
+              const el = e.currentTarget as HTMLElement
+              el.style.background = 'var(--magenta-600)'
+              el.style.boxShadow = 'var(--shadow-soft)'
+            }
+          }}
+          onMouseLeave={(e) => {
+            const el = e.currentTarget as HTMLElement
+            el.style.background = 'var(--magenta-700)'
+            el.style.boxShadow = 'var(--shadow-card)'
+          }}
         >
           {loading ? (
             <>
@@ -315,10 +388,30 @@ export default function SessionForm({ initial, sessionId }: SessionFormProps) {
             </>
           )}
         </button>
+
         <button
           type='button'
           onClick={() => router.back()}
-          className='btn btn-ghost'
+          className='btn inline-flex transition-all duration-200
+                     hover:-translate-y-0.5 active:scale-[0.97]'
+          style={{
+            fontFamily: 'var(--font-sans)',
+            background: 'transparent',
+            color: 'var(--ink-500)',
+            borderRadius: '99px',
+            padding: '10px 20px',
+            border: '1px solid var(--ink-100)',
+          }}
+          onMouseEnter={(e) => {
+            const el = e.currentTarget as HTMLElement
+            el.style.background = 'var(--bg-muted)'
+            el.style.borderColor = 'var(--pink-200)'
+          }}
+          onMouseLeave={(e) => {
+            const el = e.currentTarget as HTMLElement
+            el.style.background = 'transparent'
+            el.style.borderColor = 'var(--ink-100)'
+          }}
         >
           Cancel
         </button>

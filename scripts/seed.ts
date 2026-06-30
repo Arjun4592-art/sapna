@@ -21,17 +21,18 @@ const db = getFirestore()
 
 const programs = [
   {
-    id: '4-week',
+    id: '1-week',
     data: {
-      title: 'Soul Blueprint Intensive',
-      subtitle: '4-Week 1:1 Program',
+      slug: 'akashic',
+      title: 'Akashic',
+      subtitle: '1-Week 1:1 Program',
       description:
-        'A concentrated deep-dive combining Akashic Record Reading with tactical coaching. Move from awareness to release to rewiring — in four focused weeks.',
-      weeks: 4,
-      price: 5999,
+        'A concentrated deep-dive combining Akashic Record Reading with tactical coaching. Move from awareness to release to rewiring — in one focused week.',
+      weeks: 1,
+      price: 5000,
       originalPrice: 25000,
       includes: [
-        '4 Live 1:1 Deep-Dive Sessions (Akashic + Coaching)',
+        '1 Live 1:1 Deep-Dive Session (Akashic + Coaching)',
         'Akashic Record Reading — Your Soul Blueprint',
         'Tailored Worksheets & Reflection Exercises',
         'WhatsApp Support for Ongoing Integration',
@@ -47,27 +48,6 @@ const programs = [
             'Pinpoint exactly where your patterns broke down. We go into your Akashic Records to uncover karmic patterns, past life experiences, or limiting beliefs carried across lifetimes.',
           locked: false,
         },
-        {
-          weekNum: 2,
-          title: 'Release',
-          description:
-            'Let go of heavy conditioning, subconscious fears, unresolved emotional wounds, and old relationship contracts that do not serve your highest good.',
-          locked: true,
-        },
-        {
-          weekNum: 3,
-          title: 'Rewire',
-          description:
-            'Replace repetitive painful patterns with a new identity. We bring the soul-level clearing down to earth using practical mindset work and customized reflection exercises.',
-          locked: true,
-        },
-        {
-          weekNum: 4,
-          title: 'Rise',
-          description:
-            'Step fully into your power. Learn to set clear boundaries, break the cycle of people-pleasing, and show up as the aligned, peaceful, empowered version of yourself.',
-          locked: true,
-        },
       ],
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
@@ -76,7 +56,8 @@ const programs = [
   {
     id: '8-week',
     data: {
-      title: 'Soul Awakening: The Empowered You',
+      slug: 'relationship',
+      title: 'Relationship',
       subtitle: '8-Week 1:1 Journey',
       description:
         'The full transformation experience — from personal responsibility to visualization to sustained action. A complete system for lasting change in health, wealth, and relationships.',
@@ -183,7 +164,9 @@ async function seed() {
   console.log('📚 Seeding programs...')
   for (const program of programs) {
     await db.collection('programs').doc(program.id).set(program.data)
-    console.log(`  ✅ Program: ${program.data.title}`)
+    console.log(
+      `  ✅ Program: ${program.data.title} (slug: ${program.data.slug})`,
+    )
   }
 
   // Seed global affirmations

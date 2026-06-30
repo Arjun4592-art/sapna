@@ -41,21 +41,14 @@ export default function RazorpayButton({
   onSuccess,
   style,
 }: RazorpayButtonProps) {
-  const { user, profile, role } = useAuth()
+  const { user, profile } = useAuth()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
   async function handlePayment() {
-    // ── Not logged in ─────────────────────────────────────────
     if (!user || !profile) {
       toast('Please sign in to enroll', { icon: '🔐' })
       router.push(`/login?from=/dashboard/enroll/${programId}`)
-      return
-    }
-
-    // ── Admin cannot pay ──────────────────────────────────────
-    if (role === 'admin') {
-      toast.error('Admins cannot enroll in programs.')
       return
     }
 
@@ -69,7 +62,6 @@ export default function RazorpayButton({
         return
       }
 
-      // Create order
       const res = await fetch('/api/payment/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -88,7 +80,6 @@ export default function RazorpayButton({
         return
       }
 
-      // Open Razorpay
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: data.amount,
@@ -101,7 +92,7 @@ export default function RazorpayButton({
           email: profile.email,
           contact: profile.phone || '',
         },
-        theme: { color: '#C2847A' },
+        theme: { color: '#c4388a' }, // --pink-400
         modal: {
           ondismiss: () => {
             setLoading(false)
@@ -147,18 +138,6 @@ export default function RazorpayButton({
       toast.error(err.message || 'Something went wrong')
       setLoading(false)
     }
-  }
-
-  // ── Don't render button for admin at all ──────────────────
-  if (role === 'admin') {
-    return (
-      <div
-        className='w-full py-3 px-4 rounded-full border border-[#EDD9D4]
-                      text-center text-xs text-[#9B8B85]'
-      >
-        Admin accounts cannot enroll
-      </div>
-    )
   }
 
   return (

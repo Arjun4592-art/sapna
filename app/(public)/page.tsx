@@ -6,7 +6,7 @@ import ProgramsSection from '@/components/website/ProgramSection'
 import JourneySection from '@/components/website/JourneySection'
 import WhySapnaSection from '@/components/website/WhySapnaSection'
 import CTASection from '@/components/website/CTASection'
-import Footer from '@/components/website/Footer'
+import DedicationPage from '@/components/website/Dedication'
 
 export default function LandingPage(): JSX.Element {
   return (
@@ -16,9 +16,10 @@ export default function LandingPage(): JSX.Element {
       <AboutSection />
       <ProgramsSection />
       <JourneySection />
+      <br />
       <WhySapnaSection />
+      <DedicationPage />
       <CTASection />
-      <Footer />
     </div>
   )
 }

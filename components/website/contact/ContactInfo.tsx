@@ -49,13 +49,13 @@ interface ProgramLink {
 
 const PROGRAM_LINKS: ProgramLink[] = [
   {
-    title: 'Soul Blueprint Intensive',
-    subtitle: '4-Week · ₹5,999',
+    title: 'Akashic Record Reading Program',
+    subtitle: 'Soul-level root cause discovery',
     href: '/#programs',
   },
   {
-    title: 'Soul Awakening: Empowered You',
-    subtitle: '8-Week · ₹51,000',
+    title: 'Life & Relationship Coaching',
+    subtitle: 'Practical human transformation',
     href: '/#programs',
   },
 ]
@@ -63,20 +63,29 @@ const PROGRAM_LINKS: ProgramLink[] = [
 export default function ContactInfo(): React.JSX.Element {
   return (
     <div className='space-y-8 animate-[slideInLeft_0.6s_cubic-bezier(0.4,0,0.2,1)_forwards]'>
-      {/* Header */}
+      {/* ── Header ── */}
       <div>
         <SectionLabel>Get in touch</SectionLabel>
-        <h1 className='font-serif text-ink-900 text-3xl sm:text-4xl leading-[1.15] mb-4'>
-          Begin the <span className='italic text-rose-400'>conversation</span>
+        <h1
+          className='text-3xl sm:text-4xl leading-[1.15] mb-4'
+          style={{ fontFamily: 'var(--font-serif)', color: 'var(--ink-900)' }}
+        >
+          Begin the{' '}
+          <span className='italic' style={{ color: 'var(--pink-400)' }}>
+            conversation
+          </span>
         </h1>
-        <p className='text-sm text-ink-500 leading-relaxed font-light'>
+        <p
+          className='text-sm leading-relaxed font-light'
+          style={{ fontFamily: 'var(--font-sans)', color: 'var(--ink-500)' }}
+        >
           Have a question about the programs, want to know if this is the right
           fit for you, or simply ready to take the first step? Reach out — Sapna
           reads every message personally.
         </p>
       </div>
 
-      {/* Contact methods */}
+      {/* ── Contact methods ── */}
       <div className='space-y-3 stagger-children'>
         {CONTACT_METHODS.map(({ icon: Icon, label, value, href }) => (
           <a
@@ -84,70 +93,211 @@ export default function ContactInfo(): React.JSX.Element {
             href={href}
             target='_blank'
             rel='noopener noreferrer'
-            className='flex items-center gap-4 p-4 bg-bg-surface border border-rose-100 rounded-xl hover:border-rose-300 hover:shadow-soft hover:-translate-y-0.5 transition-all duration-200 group'
+            className='flex items-center gap-4 p-4 rounded-xl
+                       transition-all duration-200 group hover:-translate-y-0.5'
+            style={{
+              background: 'var(--bg-surface)',
+              border: '1px solid var(--pink-100)',
+            }}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget as HTMLElement
+              el.style.borderColor = 'var(--pink-300)'
+              el.style.boxShadow = 'var(--shadow-soft)'
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget as HTMLElement
+              el.style.borderColor = 'var(--pink-100)'
+              el.style.boxShadow = 'none'
+            }}
           >
-            <div className='w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center flex-shrink-0 text-rose-400 group-hover:bg-rose-100 transition-colors duration-200'>
+            <div
+              className='w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0
+                         transition-all duration-200 group-hover:scale-110'
+              style={{
+                background: 'var(--pink-50)',
+                color: 'var(--pink-400)',
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLElement
+                el.style.background = 'var(--pink-100)'
+                el.style.color = 'var(--pink-500)'
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLElement
+                el.style.background = 'var(--pink-50)'
+                el.style.color = 'var(--pink-400)'
+              }}
+            >
               <Icon size={18} />
             </div>
             <div>
-              <p className='text-[10px] font-semibold uppercase tracking-wider text-ink-400'>
+              <p
+                className='text-[10px] font-semibold uppercase tracking-wider'
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  color: 'var(--ink-400)',
+                }}
+              >
                 {label}
               </p>
-              <p className='text-sm font-medium text-ink-900'>{value}</p>
+              <p
+                className='text-sm font-medium'
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  color: 'var(--ink-900)',
+                }}
+              >
+                {value}
+              </p>
             </div>
-            <span className='ml-auto text-ink-300 group-hover:text-rose-400 transition-all duration-200 group-hover:translate-x-1'>
+            <span
+              className='ml-auto transition-all duration-200 group-hover:translate-x-1'
+              style={{ color: 'var(--ink-300)' }}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLElement).style.color =
+                  'var(--pink-400)')
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLElement).style.color =
+                  'var(--ink-300)')
+              }
+            >
               <ChevronRightIcon size={15} />
             </span>
           </a>
         ))}
       </div>
 
-      {/* What to expect */}
-      <div className='p-5 bg-ink-900 rounded-xl relative overflow-hidden animate-[fadeUp_0.5s_ease_forwards]'>
+      {/* ── What to expect ── */}
+      <div
+        className='p-5 rounded-xl relative overflow-hidden animate-[fadeUp_0.5s_ease_forwards]'
+        style={{ background: 'var(--ink-900)' }}
+      >
+        {/* Orb */}
         <div
-          className='pointer-events-none absolute -top-10 -right-10 w-32 h-32 rounded-full bg-rose-400 opacity-15 blur-[50px]'
+          className='pointer-events-none absolute -top-10 -right-10 w-32 h-32 rounded-full blur-[50px] opacity-20 animate-[orbFloat_8s_ease-in-out_infinite]'
+          style={{ background: 'var(--pink-400)' }}
           aria-hidden='true'
         />
+
         <div className='relative z-10 flex items-center gap-2 mb-3'>
-          <span className='text-rose-300 animate-[float_5s_ease-in-out_infinite]'>
+          <span className='animate-float' style={{ color: 'var(--pink-300)' }}>
             <SparkleIcon size={14} />
           </span>
-          <p className='text-xs font-semibold uppercase tracking-wider text-rose-300'>
+          <p
+            className='text-xs font-semibold uppercase tracking-wider'
+            style={{ fontFamily: 'var(--font-sans)', color: 'var(--pink-300)' }}
+          >
             What to expect
           </p>
         </div>
+
         <div className='relative z-10 space-y-2.5'>
           {EXPECTATIONS.map((item) => (
             <div key={item} className='flex items-center gap-2.5'>
-              <CheckIcon size={13} className='text-rose-300 flex-shrink-0' />
-              <p className='text-xs text-white/50'>{item}</p>
+              <CheckIcon
+                size={13}
+                className='flex-shrink-0'
+                style={{ color: 'var(--pink-300)' }}
+              />
+              <p
+                className='text-xs'
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  color: 'rgba(255,255,255,0.5)',
+                }}
+              >
+                {item}
+              </p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Program quick links */}
+      {/* ── Program quick links ── */}
       <div className='space-y-3'>
-        <p className='text-xs font-semibold uppercase tracking-widest text-ink-400'>
+        <p
+          className='text-xs font-semibold uppercase tracking-widest'
+          style={{ fontFamily: 'var(--font-sans)', color: 'var(--ink-400)' }}
+        >
           Explore programs
         </p>
         {PROGRAM_LINKS.map(({ title, subtitle, href }, i) => (
           <Link key={title} href={href}>
             <div
-              style={{ animationDelay: `${i * 0.08}s` }}
-              className='flex items-center gap-3 p-3.5 bg-bg-surface border border-rose-100 rounded-xl hover:border-rose-300 hover:shadow-soft hover:-translate-y-0.5 transition-all duration-200 mb-3 group animate-[fadeUp_0.4s_ease_forwards] opacity-0'
+              className='flex items-center gap-3 p-3.5 rounded-xl mb-3
+                         transition-all duration-200 group hover:-translate-y-0.5
+                         animate-[fadeUp_0.4s_ease_forwards] opacity-0'
+              style={{
+                background: 'var(--bg-surface)',
+                border: '1px solid var(--pink-100)',
+                animationDelay: `${i * 0.08}s`,
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLElement
+                el.style.borderColor = 'var(--pink-300)'
+                el.style.boxShadow = 'var(--shadow-soft)'
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLElement
+                el.style.borderColor = 'var(--pink-100)'
+                el.style.boxShadow = 'none'
+              }}
             >
-              <div className='w-8 h-8 rounded-lg bg-rose-50 flex items-center justify-center flex-shrink-0 text-rose-400'>
+              <div
+                className='w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0
+                           transition-all duration-200 group-hover:scale-110'
+                style={{
+                  background: 'var(--pink-50)',
+                  color: 'var(--pink-400)',
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.background = 'var(--pink-100)'
+                  el.style.color = 'var(--pink-500)'
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.background = 'var(--pink-50)'
+                  el.style.color = 'var(--pink-400)'
+                }}
+              >
                 <BookIcon size={14} />
               </div>
               <div className='flex-1'>
-                <p className='text-sm font-medium text-ink-900'>{title}</p>
-                <p className='text-xs text-ink-400'>{subtitle}</p>
+                <p
+                  className='text-sm font-medium'
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    color: 'var(--ink-900)',
+                  }}
+                >
+                  {title}
+                </p>
+                <p
+                  className='text-xs'
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    color: 'var(--ink-400)',
+                  }}
+                >
+                  {subtitle}
+                </p>
               </div>
-              <ChevronRightIcon
-                size={14}
-                className='text-ink-300 group-hover:text-rose-400 group-hover:translate-x-1 transition-all duration-200'
-              />
+              <span
+                className='transition-all duration-200 group-hover:translate-x-1'
+                style={{ color: 'var(--ink-300)' }}
+                onMouseEnter={(e) =>
+                  ((e.currentTarget as HTMLElement).style.color =
+                    'var(--pink-400)')
+                }
+                onMouseLeave={(e) =>
+                  ((e.currentTarget as HTMLElement).style.color =
+                    'var(--ink-300)')
+                }
+              >
+                <ChevronRightIcon size={14} />
+              </span>
             </div>
           </Link>
         ))}

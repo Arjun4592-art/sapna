@@ -23,7 +23,9 @@ export default function PainPointsSection(): JSX.Element {
           title={
             <>
               The patterns that keep{' '}
-              <span className='italic text-rose-500'>pulling you back</span>
+              <span className='italic' style={{ color: 'var(--pink-400)' }}>
+                pulling you back
+              </span>
             </>
           }
           description="These aren't character flaws. They're unresolved soul contracts — and they have a root."
@@ -36,15 +38,37 @@ export default function PainPointsSection(): JSX.Element {
         ))}
       </div>
 
-      {/* Closing quote */}
+      {/* ── Closing quote ── */}
       <div className='mt-10 text-center animate-[fadeUp_0.5s_ease_0.35s_forwards] opacity-0'>
         <div
-          className='inline-block px-8 py-6 rounded-2xl bg-bg-surface border border-gold-200
-                        shadow-[var(--shadow-gold)] hover:scale-[1.01] transition-transform duration-200'
+          className='inline-block px-8 py-6 rounded-2xl
+                     transition-all duration-300
+                     hover:scale-[1.02] hover:-translate-y-0.5'
+          style={{
+            background: 'var(--bg-surface)',
+            border: '1px solid var(--pink-100)',
+            boxShadow: 'var(--shadow-soft)',
+          }}
+          onMouseEnter={(e) => {
+            const el = e.currentTarget as HTMLElement
+            el.style.borderColor = 'var(--pink-200)'
+            el.style.boxShadow = '0 8px 32px rgba(196, 56, 138, 0.18)'
+          }}
+          onMouseLeave={(e) => {
+            const el = e.currentTarget as HTMLElement
+            el.style.borderColor = 'var(--pink-100)'
+            el.style.boxShadow = 'var(--shadow-soft)'
+          }}
         >
-          <p className='font-serif italic text-base text-ink-900 leading-snug'>
+          <p
+            className='italic text-base leading-snug'
+            style={{ fontFamily: 'var(--font-serif)', color: 'var(--ink-900)' }}
+          >
             If even one of these hit —{' '}
-            <span className='text-rose-500 not-italic font-medium'>
+            <span
+              className='not-italic font-medium'
+              style={{ color: 'var(--pink-400)' }}
+            >
               your soul is already asking for something deeper.
             </span>
           </p>

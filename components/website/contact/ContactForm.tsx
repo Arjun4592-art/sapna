@@ -27,8 +27,8 @@ interface ProgramOption {
 
 const PROGRAMS: ProgramOption[] = [
   { id: '', label: 'Not sure yet — help me choose' },
-  { id: '4-week', label: 'Soul Blueprint Intensive (4-Week · ₹5,999)' },
-  { id: '8-week', label: 'Soul Awakening: Empowered You (8-Week · ₹51,000)' },
+  { id: 'akashic', label: 'Akashic Record Reading Program' },
+  { id: 'relationship', label: 'Life & Relationship Coaching Program' },
 ]
 
 const EMPTY_FORM: ContactFormData = {
@@ -39,8 +39,9 @@ const EMPTY_FORM: ContactFormData = {
   message: '',
 }
 
+// input base — pink focus ring
 const inputBase =
-  'w-full pl-10 pr-4 py-2.5 rounded-xl border border-ink-100 bg-bg-surface text-ink-900 text-sm font-sans placeholder:text-ink-300 outline-none transition-all duration-200 focus:border-gold-400 focus:shadow-[0_0_0_3px_rgba(201,168,76,0.12)]'
+  'w-full pl-10 pr-4 py-2.5 rounded-xl text-sm placeholder:text-[var(--ink-300)] outline-none transition-all duration-200'
 
 function FieldIcon({
   icon: Icon,
@@ -48,7 +49,10 @@ function FieldIcon({
   icon: ComponentType<{ size?: number }>
 }): React.JSX.Element {
   return (
-    <div className='pointer-events-none absolute left-3 top-0 h-full flex items-center justify-center text-ink-300'>
+    <div
+      className='pointer-events-none absolute left-3 top-0 h-full flex items-center justify-center'
+      style={{ color: 'var(--ink-300)' }}
+    >
       <Icon size={16} />
     </div>
   )
@@ -87,19 +91,48 @@ export default function ContactForm(): React.JSX.Element {
     }
   }
 
+  const inputStyle = {
+    border: '1px solid var(--ink-100)',
+    background: 'var(--bg-surface)',
+    color: 'var(--ink-900)',
+    fontFamily: 'var(--font-sans)',
+  }
+
   return (
     <div className='lg:sticky lg:top-28'>
-      {/* Success state */}
+      {/* ── Success state ── */}
       {submitted ? (
-        <div className='card text-center py-12 space-y-5 animate-[scaleInKf_0.35s_cubic-bezier(0.4,0,0.2,1)_forwards]'>
-          <div className='w-16 h-16 rounded-full bg-rose-50 flex items-center justify-center mx-auto animate-[scaleInKf_0.4s_cubic-bezier(0.34,1.56,0.64,1)_0.1s_forwards] opacity-0'>
-            <CheckIcon size={28} className='text-rose-400' />
+        <div
+          className='card text-center py-12 space-y-5 animate-[scaleInKf_0.35s_cubic-bezier(0.4,0,0.2,1)_forwards]'
+          style={{
+            background: 'var(--bg-surface)',
+            border: '1px solid var(--pink-100)',
+          }}
+        >
+          <div
+            className='w-16 h-16 rounded-full flex items-center justify-center mx-auto
+                       animate-[scaleInKf_0.4s_cubic-bezier(0.34,1.56,0.64,1)_0.1s_forwards] opacity-0'
+            style={{ background: 'var(--pink-50)', color: 'var(--pink-400)' }}
+          >
+            <CheckIcon size={28} />
           </div>
           <div>
-            <h2 className='font-serif italic text-xl text-ink-900 mb-2'>
+            <h2
+              className='italic text-xl mb-2'
+              style={{
+                fontFamily: 'var(--font-serif)',
+                color: 'var(--ink-900)',
+              }}
+            >
               Message sent ✦
             </h2>
-            <p className='text-sm text-ink-400 leading-relaxed max-w-xs mx-auto'>
+            <p
+              className='text-sm leading-relaxed max-w-xs mx-auto'
+              style={{
+                fontFamily: 'var(--font-sans)',
+                color: 'var(--ink-400)',
+              }}
+            >
               Thank you for reaching out. Sapna will get back to you within
               24–48 hours. Check your inbox for a confirmation email.
             </p>
@@ -109,7 +142,8 @@ export default function ContactForm(): React.JSX.Element {
               setSubmitted(false)
               setForm(EMPTY_FORM)
             }}
-            className='btn btn-ghost btn-sm mx-auto hover:scale-[1.03] active:scale-[0.97] transition-transform duration-150'
+            className='btn btn-ghost btn-sm mx-auto
+                       hover:scale-[1.03] active:scale-[0.97] transition-transform duration-150'
           >
             Send another message
           </button>
@@ -117,11 +151,22 @@ export default function ContactForm(): React.JSX.Element {
       ) : (
         <form
           onSubmit={handleSubmit}
-          className='card space-y-5 animate-[fadeUp_0.4s_ease_forwards]'
+          className='space-y-5 animate-[fadeUp_0.4s_ease_forwards] rounded-2xl p-6'
+          style={{
+            background: 'var(--bg-surface)',
+            border: '1px solid var(--pink-100)',
+            boxShadow: 'var(--shadow-card)',
+          }}
         >
           <div>
             <SectionLabel>Send a message</SectionLabel>
-            <h2 className='font-serif text-lg text-ink-900'>
+            <h2
+              className='text-lg'
+              style={{
+                fontFamily: 'var(--font-serif)',
+                color: 'var(--ink-900)',
+              }}
+            >
               I&apos;d love to hear from you
             </h2>
           </div>
@@ -137,11 +182,21 @@ export default function ContactForm(): React.JSX.Element {
                 id='name'
                 name='name'
                 className={inputBase}
+                style={inputStyle}
                 value={form.name}
                 onChange={handleChange}
                 placeholder='Your name'
                 required
                 autoComplete='name'
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--pink-300)'
+                  e.currentTarget.style.boxShadow =
+                    '0 0 0 3px rgba(196, 56, 138, 0.12)'
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--ink-100)'
+                  e.currentTarget.style.boxShadow = 'none'
+                }}
               />
             </div>
           </div>
@@ -156,13 +211,23 @@ export default function ContactForm(): React.JSX.Element {
               <input
                 id='email'
                 name='email'
-                className={inputBase}
                 type='email'
+                className={inputBase}
+                style={inputStyle}
                 value={form.email}
                 onChange={handleChange}
                 placeholder='you@example.com'
                 required
                 autoComplete='email'
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--pink-300)'
+                  e.currentTarget.style.boxShadow =
+                    '0 0 0 3px rgba(196, 56, 138, 0.12)'
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--ink-100)'
+                  e.currentTarget.style.boxShadow = 'none'
+                }}
               />
             </div>
           </div>
@@ -178,10 +243,20 @@ export default function ContactForm(): React.JSX.Element {
                 id='phone'
                 name='phone'
                 className={inputBase}
+                style={inputStyle}
                 value={form.phone}
                 onChange={handleChange}
                 placeholder='+91 99999 99999'
                 autoComplete='tel'
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--pink-300)'
+                  e.currentTarget.style.boxShadow =
+                    '0 0 0 3px rgba(196, 56, 138, 0.12)'
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--ink-100)'
+                  e.currentTarget.style.boxShadow = 'none'
+                }}
               />
             </div>
           </div>
@@ -197,8 +272,18 @@ export default function ContactForm(): React.JSX.Element {
                 id='program'
                 name='program'
                 className={`${inputBase} cursor-pointer`}
+                style={inputStyle}
                 value={form.program}
                 onChange={handleChange}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--pink-300)'
+                  e.currentTarget.style.boxShadow =
+                    '0 0 0 3px rgba(196, 56, 138, 0.12)'
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--ink-100)'
+                  e.currentTarget.style.boxShadow = 'none'
+                }}
               >
                 {PROGRAMS.map((p) => (
                   <option key={p.id} value={p.id}>
@@ -217,11 +302,21 @@ export default function ContactForm(): React.JSX.Element {
             <textarea
               id='message'
               name='message'
-              className='w-full px-4 py-2.5 rounded-xl border border-ink-100 bg-bg-surface text-ink-900 text-sm font-sans placeholder:text-ink-300 outline-none transition-all duration-200 focus:border-gold-400 focus:shadow-[0_0_0_3px_rgba(201,168,76,0.12)] min-h-[130px] resize-none'
+              className='w-full px-4 py-2.5 rounded-xl text-sm placeholder:text-[var(--ink-300)] outline-none transition-all duration-200 min-h-[130px] resize-none'
+              style={inputStyle}
               value={form.message}
               onChange={handleChange}
               placeholder='Tell Sapna a little about what you are going through and what you are hoping to heal or transform…'
               required
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = 'var(--pink-300)'
+                e.currentTarget.style.boxShadow =
+                  '0 0 0 3px rgba(196, 56, 138, 0.12)'
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = 'var(--ink-100)'
+                e.currentTarget.style.boxShadow = 'none'
+              }}
             />
           </div>
 
@@ -229,7 +324,28 @@ export default function ContactForm(): React.JSX.Element {
           <button
             type='submit'
             disabled={loading}
-            className='btn btn-primary w-full flex items-center justify-center gap-2 hover:scale-[1.015] active:scale-[0.97] transition-transform duration-150 disabled:opacity-40 disabled:transform-none'
+            className='btn btn-primary w-full flex items-center justify-center gap-2
+                       hover:scale-[1.015] active:scale-[0.97]
+                       transition-all duration-150 disabled:opacity-40 disabled:transform-none'
+            style={{
+              fontFamily: 'var(--font-sans)',
+              background: 'var(--magenta-700)',
+              color: '#ffffff',
+              borderRadius: '99px',
+              boxShadow: 'var(--shadow-card)',
+            }}
+            onMouseEnter={(e) => {
+              if (!loading) {
+                const el = e.currentTarget as HTMLElement
+                el.style.background = 'var(--magenta-600)'
+                el.style.boxShadow = 'var(--shadow-soft)'
+              }
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget as HTMLElement
+              el.style.background = 'var(--magenta-700)'
+              el.style.boxShadow = 'var(--shadow-card)'
+            }}
           >
             {loading ? (
               <>
@@ -255,7 +371,10 @@ export default function ContactForm(): React.JSX.Element {
             )}
           </button>
 
-          <p className='text-xs text-ink-300 text-center'>
+          <p
+            className='text-xs text-center'
+            style={{ fontFamily: 'var(--font-sans)', color: 'var(--ink-300)' }}
+          >
             You&apos;ll receive a confirmation email immediately. Sapna responds
             within 24–48 hours.
           </p>

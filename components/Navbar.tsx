@@ -2,8 +2,9 @@
 
 import { useState, useEffect, type JSX } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { SparkleIcon, MenuIcon, XIcon } from '@/components/icons'
+import { MenuIcon, XIcon } from '@/components/icons'
 
 interface NavLink {
   label: string
@@ -11,11 +12,10 @@ interface NavLink {
 }
 
 const NAV_LINKS: NavLink[] = [
-  { label: 'Programs', href: '/#programs' },
-  { label: 'Journey', href: '/#journey' },
+  { label: 'Home', href: '/' },
+  { label: 'Courses', href: '/courses' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
-  { label: 'Dedication', href: '/dedications' },
 ]
 
 const MARQUEE_TEXT = 'ॐ नमः शिवाय'
@@ -25,17 +25,19 @@ function MarqueeStrip(): JSX.Element {
   const items = Array.from({ length: MARQUEE_REPEAT })
 
   return (
-    <div className='w-full overflow-hidden py-1.5 bg-gradient-to-r from-burgundy-700 via-rose-500 to-burgundy-700'>
+    <div className='w-full overflow-hidden py-1.5 bg-gradient-to-r from-[var(--magenta-700)] via-[var(--pink-400)] to-[var(--magenta-700)]'>
       <div className='flex w-max whitespace-nowrap animate-[marquee_22s_linear_infinite]'>
         {[0, 1].map((half) => (
           <div key={half} className='flex shrink-0'>
             {items.map((_, i) => (
               <span
                 key={`${half}-${i}`}
-                className='mx-5 text-[10px] font-semibold tracking-[0.28em] text-rose-100'
+                className='mx-5 text-[10px] font-semibold tracking-[0.28em] text-[var(--pink-100)]'
               >
                 {MARQUEE_TEXT}
-                <span className='mx-4 text-gold-400 opacity-70'>✦</span>
+                <span className='mx-4 text-[var(--pink-200)] opacity-70'>
+                  ✦
+                </span>
               </span>
             ))}
           </div>
@@ -57,8 +59,29 @@ export default function Navbar(): JSX.Element {
   }, [])
 
   useEffect(() => {
-    document.body.classList.toggle('overflow-hidden', open)
-    return () => document.body.classList.remove('overflow-hidden')
+    if (open) {
+      const scrollY = window.scrollY
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.left = '0'
+      document.body.style.right = '0'
+    } else {
+      const savedY = document.body.style.top
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.left = ''
+      document.body.style.right = ''
+      if (savedY) {
+        window.scrollTo(0, parseInt(savedY || '0', 10) * -1)
+      }
+    }
+
+    return () => {
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.left = ''
+      document.body.style.right = ''
+    }
   }, [open])
 
   useEffect(() => {
@@ -76,7 +99,7 @@ export default function Navbar(): JSX.Element {
         <nav
           className={`w-full border-b transition-all duration-300 ${
             scrolled
-              ? 'bg-[var(--bg-base)]/97 border-rose-100 shadow-[var(--shadow-card)] backdrop-blur-xl py-2.5'
+              ? 'bg-[var(--bg-base)]/97 border-[var(--pink-100)] shadow-[var(--shadow-card)] backdrop-blur-xl py-2.5'
               : 'bg-[var(--bg-base)]/80 border-transparent backdrop-blur-md py-4'
           }`}
         >
@@ -85,41 +108,44 @@ export default function Navbar(): JSX.Element {
             <Link
               href='/'
               className='flex items-center gap-2.5 group shrink-0 outline-none
-                         focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 rounded'
+                         focus-visible:ring-2 focus-visible:ring-[var(--pink-300)] focus-visible:ring-offset-2 rounded'
             >
+              {/* Logo image — replace src with your actual logo path */}
               <span
-                className='relative flex h-8 w-8 items-center justify-center rounded-full
-                           bg-rose-50 border border-rose-100
-                           group-hover:border-gold-400 group-hover:bg-rose-100
-                           transition-all duration-300'
+                className='relative flex h-9 w-9 items-center justify-center rounded-full
+                           bg-[var(--pink-50)] border border-[var(--pink-100)]
+                           group-hover:border-[var(--pink-300)] group-hover:bg-[var(--pink-100)]
+                           transition-all duration-300 overflow-hidden'
               >
                 {/* Pulse ring */}
                 <span
-                  className='absolute inset-0 rounded-full border border-gold-300
+                  className='absolute inset-0 rounded-full border border-[var(--pink-200)]
                              opacity-0 group-hover:opacity-100
                              animate-[pulseRing_1.8s_ease-out_infinite]'
                 />
-                <span
-                  className='text-rose-500 group-hover:text-gold-500
-                             transition-colors duration-300
-                             animate-[spin_10s_linear_infinite]'
-                >
-                  <SparkleIcon size={14} />
-                </span>
+                <Image
+                  src='/logo.jpeg'
+                  alt='Logo'
+                  width={36}
+                  height={36}
+                  className='object-contain rounded-full'
+                  priority
+                />
               </span>
 
+              {/* Brand name — update karo apne brand ke hisaab se */}
               <span
                 className='font-serif text-base text-[var(--ink-900)] hidden sm:block
-                           group-hover:text-[var(--burgundy-600)] transition-colors duration-200'
+                           group-hover:text-[var(--magenta-600)] transition-colors duration-200'
               >
-                Soul Awakening
+                Soul Awakening With Sapna
               </span>
             </Link>
 
             {/* ── Desktop pill nav ── */}
             <div
-              className='hidden md:flex items-center gap-0.5 rounded-full px-1.5 py-1
-                         bg-rose-50/70 border border-rose-100'
+              className='hidden md:flex items-center gap-1 rounded-full px-2 py-1.5
+                         bg-[var(--pink-50)]/70 border border-[var(--pink-100)]'
             >
               {NAV_LINKS.map(({ label, href }) => {
                 const active = isActiveLink(href)
@@ -127,14 +153,11 @@ export default function Navbar(): JSX.Element {
                   <Link
                     key={label}
                     href={href}
-                    className={`relative px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider
-                                rounded-full transition-all duration-200 outline-none
-                                focus-visible:ring-2 focus-visible:ring-gold-400
-                                ${
-                                  active
-                                    ? 'text-white bg-[var(--burgundy-700)]'
-                                    : 'text-[var(--ink-500)] hover:text-[var(--ink-900)] hover:bg-white/60'
-                                }`}
+                    className={`relative px-5 py-2 text-[12px] font-semibold uppercase tracking-wider rounded-full transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[var(--pink-300)] ${
+                      active
+                        ? 'text-[var(--magenta-700)] bg-[var(--pink-100)]'
+                        : 'text-[var(--ink-500)] hover:text-[var(--ink-900)] hover:bg-white/60'
+                    }`}
                   >
                     {label}
                   </Link>
@@ -146,13 +169,13 @@ export default function Navbar(): JSX.Element {
             <div className='hidden md:block shrink-0'>
               <Link
                 href='/login'
-                className='btn btn-primary btn-sm inline-flex
-                           hover:shadow-[0_4px_16px_rgba(201,168,76,0.3)]
+                className='btn btn-primary btn-md flex
+                           hover:shadow-[0_4px_16px_rgba(138,26,92,0.3)]
                            hover:-translate-y-px hover:scale-[1.04]
                            active:scale-[0.97]
-                           transition-all duration-200'
+                           transition-all duration-200 px-5 py-2'
               >
-                Student Login
+                Login
               </Link>
             </div>
 
@@ -162,9 +185,9 @@ export default function Navbar(): JSX.Element {
               onClick={() => setOpen((v) => !v)}
               aria-label={open ? 'Close menu' : 'Open menu'}
               className='md:hidden flex h-9 w-9 items-center justify-center rounded
-                         text-[var(--ink-900)] hover:bg-rose-50 active:bg-rose-100
+                         text-[var(--ink-900)] hover:bg-[var(--pink-50)] active:bg-[var(--pink-100)]
                          transition-colors duration-150 shrink-0
-                         focus-visible:ring-2 focus-visible:ring-gold-400 outline-none'
+                         focus-visible:ring-2 focus-visible:ring-[var(--pink-300)] outline-none'
             >
               {open ? <XIcon size={19} /> : <MenuIcon size={19} />}
             </button>
@@ -176,35 +199,45 @@ export default function Navbar(): JSX.Element {
       {open && (
         <>
           {/* Backdrop */}
-          <div
+          <button
+            type='button'
+            aria-label='Close menu'
             onClick={() => setOpen(false)}
-            className='fixed inset-0 z-40 md:hidden
-                       bg-[var(--burgundy-900)]/50 backdrop-blur-sm
+            className='fixed inset-0 z-40 md:hidden cursor-pointer
+                       bg-[var(--magenta-900)]/50 backdrop-blur-sm
                        animate-[fadeIn_0.2s_ease_both]'
           />
 
           {/* Drawer panel */}
           <div
-            className='fixed top-0 right-0 bottom-0 z-50 w-[80%] max-w-xs
+            className='fixed top-0 right-0 z-50 w-[80%] max-w-xs h-dvh
                        md:hidden flex flex-col bg-[var(--bg-base)]
-                       border-l border-rose-100 shadow-2xl
+                       border-l border-[var(--pink-100)] shadow-2xl
                        animate-[slideInRight_0.28s_cubic-bezier(0.4,0,0.2,1)_both]'
           >
             {/* Drawer header */}
-            <div className='flex items-center justify-between px-5 py-4 border-b border-rose-100'>
-              <div className='flex items-center gap-2'>
-                <span className='w-2 h-2 rounded-full bg-gold-400' />
+            <div className='flex items-center justify-between px-5 py-4 border-b border-[var(--pink-100)]'>
+              <div className='flex items-center gap-2.5'>
+                <span className='relative flex h-7 w-7 items-center justify-center rounded-full overflow-hidden border border-[var(--pink-100)]'>
+                  <Image
+                    src='/logo.jpeg'
+                    alt='Logo'
+                    width={28}
+                    height={28}
+                    className='object-contain rounded-full'
+                  />
+                </span>
                 <span className='font-serif text-sm text-[var(--ink-900)]'>
-                  Menu
+                  Soul Awakening With Sapna
                 </span>
               </div>
               <button
                 type='button'
                 onClick={() => setOpen(false)}
                 className='h-8 w-8 flex items-center justify-center rounded
-                           text-[var(--ink-400)] hover:bg-rose-50 active:bg-rose-100
+                           text-[var(--ink-400)] hover:bg-[var(--pink-50)] active:bg-[var(--pink-100)]
                            transition-colors duration-150
-                           focus-visible:ring-2 focus-visible:ring-gold-400 outline-none
+                           focus-visible:ring-2 focus-visible:ring-[var(--pink-300)] outline-none
                            active:scale-90'
               >
                 <XIcon size={17} />
@@ -219,20 +252,21 @@ export default function Navbar(): JSX.Element {
                   <Link
                     key={label}
                     href={href}
+                    onClick={() => setOpen(false)}
                     className={`flex items-center justify-between px-3.5 py-3 rounded-xl
                                 text-sm font-semibold transition-all duration-150
-                                focus-visible:ring-2 focus-visible:ring-gold-400 outline-none
+                                focus-visible:ring-2 focus-visible:ring-[var(--pink-300)] outline-none
                                 opacity-0 animate-[fadeSlideLeft_0.25s_ease_both]
                                 ${
                                   active
-                                    ? 'bg-rose-100 text-[var(--rose-600)]'
-                                    : 'text-[var(--ink-500)] hover:bg-rose-50 hover:text-[var(--ink-900)]'
+                                    ? 'bg-[var(--pink-100)] text-[var(--pink-500)]'
+                                    : 'text-[var(--ink-500)] hover:bg-[var(--pink-50)] hover:text-[var(--ink-900)]'
                                 }`}
                     style={{ animationDelay: `${0.04 + i * 0.05}s` }}
                   >
                     <span>{label}</span>
                     <span
-                      className={`text-xs transition-transform duration-200 ${active ? 'text-rose-400 translate-x-1' : 'text-[var(--ink-300)]'}`}
+                      className={`text-xs transition-transform duration-200 ${active ? 'text-[var(--pink-400)] translate-x-1' : 'text-[var(--ink-300)]'}`}
                     >
                       →
                     </span>
@@ -242,9 +276,10 @@ export default function Navbar(): JSX.Element {
             </nav>
 
             {/* Drawer footer */}
-            <div className='px-5 py-5 border-t border-rose-100 space-y-2.5'>
+            <div className='px-5 py-5 border-t border-[var(--pink-100)] space-y-2.5'>
               <Link
                 href='/login'
+                onClick={() => setOpen(false)}
                 className='btn btn-primary w-full justify-center inline-flex active:scale-[0.97] transition-transform duration-150'
               >
                 Student Login

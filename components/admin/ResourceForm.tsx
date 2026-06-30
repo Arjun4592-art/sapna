@@ -26,8 +26,8 @@ interface ResourceFormProps {
 }
 
 const PROGRAMS = [
-  { id: '4-week', label: 'Soul Blueprint (4-Week)' },
-  { id: '8-week', label: 'Empowered You (8-Week)' },
+  { id: 'akashic', label: 'Akashic Record Reading Program' },
+  { id: 'relationship', label: 'Life & Relationship Coaching Program' },
   { id: 'both', label: 'Both Programs' },
 ]
 
@@ -38,12 +38,34 @@ const TYPES = [
   { id: 'link', label: 'External Link' },
 ]
 
-const fieldIconClass =
-  'pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-300'
+const inputStyle = {
+  border: '1px solid var(--ink-100)',
+  background: 'var(--bg-surface)',
+  color: 'var(--ink-900)',
+  fontFamily: 'var(--font-sans)',
+}
+
 const inputBase =
-  'w-full pl-10 pr-4 py-2.5 rounded-xl border border-ink-100 bg-bg-surface text-ink-900 text-sm font-sans placeholder:text-ink-300 outline-none transition-all duration-200 focus:border-gold-400 focus:shadow-[0_0_0_3px_rgba(201,168,76,0.12)]'
+  'w-full pl-10 pr-4 py-2.5 rounded-xl text-sm placeholder:text-[var(--ink-300)] outline-none transition-all duration-200'
 const inputPlain =
-  'w-full px-4 py-2.5 rounded-xl border border-ink-100 bg-bg-surface text-ink-900 text-sm font-sans placeholder:text-ink-300 outline-none transition-all duration-200 focus:border-gold-400 focus:shadow-[0_0_0_3px_rgba(201,168,76,0.12)]'
+  'w-full px-4 py-2.5 rounded-xl text-sm placeholder:text-[var(--ink-300)] outline-none transition-all duration-200'
+
+function focusInput(
+  e: React.FocusEvent<
+    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+  >,
+) {
+  e.currentTarget.style.borderColor = 'var(--pink-300)'
+  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(196, 56, 138, 0.12)'
+}
+function blurInput(
+  e: React.FocusEvent<
+    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+  >,
+) {
+  e.currentTarget.style.borderColor = 'var(--ink-100)'
+  e.currentTarget.style.boxShadow = 'none'
+}
 
 export default function ResourceForm({
   initial,
@@ -54,7 +76,7 @@ export default function ResourceForm({
 
   const [form, setForm] = useState({
     title: initial?.title || '',
-    programId: initial?.programId || '4-week',
+    programId: initial?.programId || 'akashic',
     weekNum: initial?.weekNum || 1,
     type: initial?.type || 'pdf',
     url: initial?.url || '',
@@ -85,7 +107,6 @@ export default function ResourceForm({
       const path = `resources/${Date.now()}_${f.name}`
       const storageRef = ref(storage, path)
       const task = uploadBytesResumable(storageRef, f)
-
       task.on(
         'state_changed',
         (snap) =>
@@ -151,7 +172,7 @@ export default function ResourceForm({
     }
   }
 
-  const weeks = form.programId === '8-week' ? 8 : 4
+  const weeks = form.programId === 'relationship' ? 8 : 4
 
   return (
     <form onSubmit={handleSubmit} className='space-y-6 max-w-2xl'>
@@ -159,27 +180,48 @@ export default function ResourceForm({
       <button
         type='button'
         onClick={() => router.back()}
-        className='flex items-center gap-1.5 text-sm text-ink-400 hover:text-ink-900 transition-colors duration-150'
+        className='flex items-center gap-1.5 text-sm transition-colors duration-150'
+        style={{ fontFamily: 'var(--font-sans)', color: 'var(--ink-400)' }}
+        onMouseEnter={(e) =>
+          ((e.currentTarget as HTMLElement).style.color = 'var(--ink-900)')
+        }
+        onMouseLeave={(e) =>
+          ((e.currentTarget as HTMLElement).style.color = 'var(--ink-400)')
+        }
       >
         <ArrowLeftIcon size={15} />
         Back to resources
       </button>
 
-      <div className='card space-y-5'>
+      {/* Card */}
+      <div
+        className='rounded-2xl p-6 space-y-5'
+        style={{
+          background: 'var(--bg-surface)',
+          border: '1px solid var(--ink-100)',
+          boxShadow: 'var(--shadow-card)',
+        }}
+      >
         {/* Title */}
         <div>
           <label className='input-label'>Resource title *</label>
           <div className='relative'>
-            <div className={fieldIconClass}>
+            <div
+              className='pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2'
+              style={{ color: 'var(--ink-300)' }}
+            >
               <FileIcon size={16} />
             </div>
             <input
               name='title'
               className={inputBase}
+              style={inputStyle}
               value={form.title}
               onChange={handleChange}
               placeholder='e.g. Week 1 — Responsibility Worksheet'
               required
+              onFocus={focusInput}
+              onBlur={blurInput}
             />
           </div>
         </div>
@@ -189,14 +231,20 @@ export default function ResourceForm({
           <div>
             <label className='input-label'>Program</label>
             <div className='relative'>
-              <div className={fieldIconClass}>
+              <div
+                className='pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2'
+                style={{ color: 'var(--ink-300)' }}
+              >
                 <BookIcon size={15} />
               </div>
               <select
                 name='programId'
                 className={`${inputBase} cursor-pointer`}
+                style={inputStyle}
                 value={form.programId}
                 onChange={handleChange}
+                onFocus={focusInput}
+                onBlur={blurInput}
               >
                 {PROGRAMS.map((p) => (
                   <option key={p.id} value={p.id}>
@@ -211,8 +259,11 @@ export default function ResourceForm({
             <select
               name='weekNum'
               className={`${inputPlain} cursor-pointer`}
+              style={inputStyle}
               value={form.weekNum}
               onChange={handleChange}
+              onFocus={focusInput}
+              onBlur={blurInput}
             >
               {Array.from({ length: weeks }, (_, i) => (
                 <option key={i + 1} value={i + 1}>
@@ -226,8 +277,11 @@ export default function ResourceForm({
             <select
               name='type'
               className={`${inputPlain} cursor-pointer`}
+              style={inputStyle}
               value={form.type}
               onChange={handleChange}
+              onFocus={focusInput}
+              onBlur={blurInput}
             >
               {TYPES.map((t) => (
                 <option key={t.id} value={t.id}>
@@ -243,12 +297,25 @@ export default function ResourceForm({
           <div>
             <label className='input-label'>Upload file</label>
             <label
-              className={[
-                'flex flex-col items-center justify-center gap-3 border-2 border-dashed rounded-xl p-8 cursor-pointer transition-all duration-200',
-                file
-                  ? 'border-rose-400 bg-bg-muted'
-                  : 'border-rose-100 hover:border-rose-300 hover:bg-bg-muted',
-              ].join(' ')}
+              className='flex flex-col items-center justify-center gap-3 border-2 border-dashed rounded-xl p-8 cursor-pointer transition-all duration-200'
+              style={{
+                borderColor: file ? 'var(--pink-400)' : 'var(--pink-100)',
+                background: file ? 'var(--bg-muted)' : 'transparent',
+              }}
+              onMouseEnter={(e) => {
+                if (!file) {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.borderColor = 'var(--pink-300)'
+                  el.style.background = 'var(--bg-muted)'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!file) {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.borderColor = 'var(--pink-100)'
+                  el.style.background = 'transparent'
+                }
+              }}
             >
               <input
                 type='file'
@@ -264,25 +331,50 @@ export default function ResourceForm({
                 }
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
               />
-              <UploadIcon
-                size={24}
-                className={file ? 'text-rose-400' : 'text-ink-300'}
-              />
+              <span
+                style={{ color: file ? 'var(--pink-400)' : 'var(--ink-300)' }}
+              >
+                <UploadIcon size={24} />
+              </span>
               {file ? (
                 <div className='text-center'>
-                  <p className='text-sm font-medium text-ink-900'>
+                  <p
+                    className='text-sm font-medium'
+                    style={{
+                      color: 'var(--ink-900)',
+                      fontFamily: 'var(--font-sans)',
+                    }}
+                  >
                     {file.name}
                   </p>
-                  <p className='text-xs text-ink-400 mt-0.5'>
+                  <p
+                    className='text-xs mt-0.5'
+                    style={{
+                      color: 'var(--ink-400)',
+                      fontFamily: 'var(--font-sans)',
+                    }}
+                  >
                     {(file.size / 1024 / 1024).toFixed(2)} MB
                   </p>
                 </div>
               ) : (
                 <div className='text-center'>
-                  <p className='text-sm font-medium text-ink-400'>
+                  <p
+                    className='text-sm font-medium'
+                    style={{
+                      color: 'var(--ink-400)',
+                      fontFamily: 'var(--font-sans)',
+                    }}
+                  >
                     Click to upload
                   </p>
-                  <p className='text-xs text-ink-300 mt-0.5'>
+                  <p
+                    className='text-xs mt-0.5'
+                    style={{
+                      color: 'var(--ink-300)',
+                      fontFamily: 'var(--font-sans)',
+                    }}
+                  >
                     {form.type === 'pdf'
                       ? 'PDF files up to 20MB'
                       : form.type === 'audio'
@@ -296,7 +388,13 @@ export default function ResourceForm({
             {/* Upload progress */}
             {uploading && (
               <div className='mt-3'>
-                <div className='flex justify-between text-xs text-ink-400 mb-1'>
+                <div
+                  className='flex justify-between text-xs mb-1'
+                  style={{
+                    color: 'var(--ink-400)',
+                    fontFamily: 'var(--font-sans)',
+                  }}
+                >
                   <span>Uploading…</span>
                   <span>{uploadProgress}%</span>
                 </div>
@@ -311,15 +409,24 @@ export default function ResourceForm({
 
             {/* Or paste URL */}
             <div className='mt-3'>
-              <p className='text-xs text-ink-300 mb-1.5'>
+              <p
+                className='text-xs mb-1.5'
+                style={{
+                  color: 'var(--ink-300)',
+                  fontFamily: 'var(--font-sans)',
+                }}
+              >
                 Or paste a direct URL instead
               </p>
               <input
                 name='url'
                 className={inputPlain}
+                style={inputStyle}
                 value={form.url}
                 onChange={handleChange}
                 placeholder='https://…'
+                onFocus={focusInput}
+                onBlur={blurInput}
               />
             </div>
           </div>
@@ -329,18 +436,41 @@ export default function ResourceForm({
             <input
               name='url'
               className={inputPlain}
+              style={inputStyle}
               value={form.url}
               onChange={handleChange}
               placeholder='https://…'
+              onFocus={focusInput}
+              onBlur={blurInput}
             />
           </div>
         )}
 
         {/* Locked toggle */}
-        <div className='flex items-center justify-between p-4 rounded-xl bg-bg-muted border border-rose-100'>
+        <div
+          className='flex items-center justify-between p-4 rounded-xl'
+          style={{
+            background: 'var(--bg-muted)',
+            border: '1px solid var(--pink-100)',
+          }}
+        >
           <div>
-            <p className='text-sm font-medium text-ink-900'>Lock resource</p>
-            <p className='text-xs text-ink-400 mt-0.5'>
+            <p
+              className='text-sm font-medium'
+              style={{
+                fontFamily: 'var(--font-sans)',
+                color: 'var(--ink-900)',
+              }}
+            >
+              Lock resource
+            </p>
+            <p
+              className='text-xs mt-0.5'
+              style={{
+                fontFamily: 'var(--font-sans)',
+                color: 'var(--ink-400)',
+              }}
+            >
               Locked resources are hidden until the relevant week is reached
             </p>
           </div>
@@ -348,18 +478,18 @@ export default function ResourceForm({
             onClick={() =>
               setForm((prev) => ({ ...prev, locked: !prev.locked }))
             }
-            className={[
-              'w-11 h-6 rounded-full transition-colors duration-200 cursor-pointer flex items-center px-0.5 flex-shrink-0',
-              form.locked ? 'bg-rose-400' : 'bg-ink-100',
-            ].join(' ')}
+            className='w-11 h-6 rounded-full transition-colors duration-200 cursor-pointer flex items-center px-0.5 flex-shrink-0'
+            style={{
+              background: form.locked ? 'var(--pink-400)' : 'var(--ink-100)',
+            }}
             role='switch'
             aria-checked={form.locked}
           >
             <div
-              className={[
-                'w-5 h-5 rounded-full bg-white shadow-sm transition-transform duration-200',
-                form.locked ? 'translate-x-5' : 'translate-x-0',
-              ].join(' ')}
+              className='w-5 h-5 rounded-full bg-white shadow-sm transition-transform duration-200'
+              style={{
+                transform: form.locked ? 'translateX(20px)' : 'translateX(0)',
+              }}
             />
           </div>
         </div>
@@ -370,9 +500,12 @@ export default function ResourceForm({
           <textarea
             name='notes'
             className={`${inputPlain} min-h-[80px] resize-none`}
+            style={inputStyle}
             value={form.notes}
             onChange={handleChange}
             placeholder='Internal notes about this resource…'
+            onFocus={focusInput}
+            onBlur={blurInput}
           />
         </div>
       </div>
@@ -382,7 +515,29 @@ export default function ResourceForm({
         <button
           type='submit'
           disabled={loading || uploading}
-          className='btn btn-primary flex items-center gap-2 disabled:opacity-40'
+          className='btn inline-flex items-center gap-2 disabled:opacity-40
+                     transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.02]
+                     active:scale-[0.97]'
+          style={{
+            fontFamily: 'var(--font-sans)',
+            background: 'var(--magenta-700)',
+            color: '#ffffff',
+            borderRadius: '99px',
+            padding: '10px 20px',
+            boxShadow: 'var(--shadow-card)',
+          }}
+          onMouseEnter={(e) => {
+            if (!loading && !uploading) {
+              const el = e.currentTarget as HTMLElement
+              el.style.background = 'var(--magenta-600)'
+              el.style.boxShadow = 'var(--shadow-soft)'
+            }
+          }}
+          onMouseLeave={(e) => {
+            const el = e.currentTarget as HTMLElement
+            el.style.background = 'var(--magenta-700)'
+            el.style.boxShadow = 'var(--shadow-card)'
+          }}
         >
           {loading || uploading ? (
             <>
@@ -407,10 +562,30 @@ export default function ResourceForm({
             </>
           )}
         </button>
+
         <button
           type='button'
           onClick={() => router.back()}
-          className='btn btn-ghost'
+          className='btn inline-flex transition-all duration-200
+                     hover:-translate-y-0.5 active:scale-[0.97]'
+          style={{
+            fontFamily: 'var(--font-sans)',
+            background: 'transparent',
+            color: 'var(--ink-500)',
+            borderRadius: '99px',
+            padding: '10px 20px',
+            border: '1px solid var(--ink-100)',
+          }}
+          onMouseEnter={(e) => {
+            const el = e.currentTarget as HTMLElement
+            el.style.background = 'var(--bg-muted)'
+            el.style.borderColor = 'var(--pink-200)'
+          }}
+          onMouseLeave={(e) => {
+            const el = e.currentTarget as HTMLElement
+            el.style.background = 'transparent'
+            el.style.borderColor = 'var(--ink-100)'
+          }}
         >
           Cancel
         </button>

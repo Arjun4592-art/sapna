@@ -14,7 +14,6 @@ import {
 } from '@/components/icons'
 import type { Program, Module } from '@/types'
 
-// ── Local form state types ───────────────────────────────────────────────────
 interface ProgramFormState {
   title: string
   subtitle: string
@@ -30,13 +29,11 @@ type ModuleFormState = Pick<
   'weekNum' | 'title' | 'description' | 'locked'
 >
 
-// ── Props ────────────────────────────────────────────────────────────────────
 interface ProgramFormProps {
   initial?: Partial<Program>
   programId?: string
 }
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
 function buildDefaultModules(
   weeks: number,
   existing?: Module[],
@@ -49,7 +46,7 @@ function buildDefaultModules(
   }))
 }
 
-// ── Toggle switch ─────────────────────────────────────────────────────────────
+// ── Toggle ────────────────────────────────────────────────────────────────────
 interface ToggleProps {
   checked: boolean
   onChange: () => void
@@ -59,26 +56,30 @@ interface ToggleProps {
 function Toggle({ checked, onChange, label }: ToggleProps): JSX.Element {
   return (
     <label className='flex items-center gap-2 cursor-pointer select-none'>
-      <span className='text-xs text-ink-400'>{label}</span>
+      <span
+        className='text-xs'
+        style={{ fontFamily: 'var(--font-sans)', color: 'var(--ink-400)' }}
+      >
+        {label}
+      </span>
       <button
         type='button'
         role='switch'
         aria-checked={checked}
         onClick={onChange}
-        className={`w-9 h-5 rounded-full transition-colors duration-200
-                    flex items-center px-0.5
-                    ${checked ? 'bg-rose-400' : 'bg-ink-100'}`}
+        className='w-9 h-5 rounded-full transition-colors duration-200 flex items-center px-0.5'
+        style={{ background: checked ? 'var(--pink-400)' : 'var(--ink-100)' }}
       >
         <div
-          className={`w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-200
-                      ${checked ? 'translate-x-4' : 'translate-x-0'}`}
+          className='w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-200'
+          style={{ transform: checked ? 'translateX(16px)' : 'translateX(0)' }}
         />
       </button>
     </label>
   )
 }
 
-// ── Spinner ──────────────────────────────────────────────────────────────────
+// ── Spinner ───────────────────────────────────────────────────────────────────
 function Spinner(): JSX.Element {
   return (
     <svg
@@ -95,7 +96,40 @@ function Spinner(): JSX.Element {
   )
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
+// ── Input focus helpers ───────────────────────────────────────────────────────
+function focusInput(
+  e: React.FocusEvent<
+    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  >,
+) {
+  e.currentTarget.style.borderColor = 'var(--pink-300)'
+  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(196, 56, 138, 0.12)'
+}
+function blurInput(
+  e: React.FocusEvent<
+    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  >,
+) {
+  e.currentTarget.style.borderColor = 'var(--ink-100)'
+  e.currentTarget.style.boxShadow = 'none'
+}
+
+const inputStyle = {
+  border: '1px solid var(--ink-100)',
+  background: 'var(--bg-surface)',
+  color: 'var(--ink-900)',
+  fontFamily: 'var(--font-sans)',
+}
+
+const cardStyle = {
+  background: 'var(--bg-surface)',
+  border: '1px solid var(--ink-100)',
+  boxShadow: 'var(--shadow-card)',
+  borderRadius: '16px',
+  padding: '24px',
+}
+
+// ── Main ──────────────────────────────────────────────────────────────────────
 export default function ProgramForm({
   initial,
   programId,
@@ -116,7 +150,6 @@ export default function ProgramForm({
   const [modules, setModules] = useState<ModuleFormState[]>(
     buildDefaultModules(initial?.weeks ?? 4, initial?.modules),
   )
-
   const [loading, setLoading] = useState<boolean>(false)
 
   function handleChange(
@@ -173,7 +206,8 @@ export default function ProgramForm({
     }
     setLoading(true)
     try {
-      const id = programId ?? (form.weeks === 4 ? '4-week' : '8-week')
+      // ID is now akashic or relationship based on weeks
+      const id = programId ?? (form.weeks === 4 ? 'akashic' : 'relationship')
       const payload = {
         title: form.title.trim(),
         subtitle: form.subtitle.trim(),
@@ -198,9 +232,7 @@ export default function ProgramForm({
       }
       router.push('/admin/programs')
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : 'Something went wrong'
-      toast.error(message)
+      toast.error(err instanceof Error ? err.message : 'Something went wrong')
     } finally {
       setLoading(false)
     }
@@ -211,53 +243,73 @@ export default function ProgramForm({
       onSubmit={handleSubmit}
       className='space-y-6 max-w-2xl animate-fade-up'
     >
+      {/* Back */}
       <button
         type='button'
         onClick={() => router.back()}
-        className='flex items-center gap-1.5 text-sm text-ink-400
-                   hover:text-ink-900 transition-colors duration-150'
+        className='flex items-center gap-1.5 text-sm transition-colors duration-150'
+        style={{ fontFamily: 'var(--font-sans)', color: 'var(--ink-400)' }}
+        onMouseEnter={(e) =>
+          ((e.currentTarget as HTMLElement).style.color = 'var(--ink-900)')
+        }
+        onMouseLeave={(e) =>
+          ((e.currentTarget as HTMLElement).style.color = 'var(--ink-400)')
+        }
       >
         <ArrowLeftIcon size={15} />
         Back to programs
       </button>
 
-      {/* Basic info */}
-      <div style={{ borderRadius: '6px' }} className='card space-y-5'>
-        <h2 className='font-serif text-base font-semibold text-ink-900'>
+      {/* ── Basic Info ── */}
+      <div style={cardStyle} className='space-y-5'>
+        <h2
+          className='text-base font-semibold'
+          style={{ fontFamily: 'var(--font-serif)', color: 'var(--ink-900)' }}
+        >
           Basic Info
         </h2>
 
-        <div>
-          <label className='input-label'>Program title *</label>
-          <input
-            name='title'
-            className='input'
-            value={form.title}
-            onChange={handleChange}
-            placeholder='e.g. Soul Blueprint Intensive'
-            required
-          />
-        </div>
-
-        <div>
-          <label className='input-label'>Subtitle</label>
-          <input
-            name='subtitle'
-            className='input'
-            value={form.subtitle}
-            onChange={handleChange}
-            placeholder='e.g. 4-Week 1:1 Program'
-          />
-        </div>
+        {[
+          {
+            name: 'title',
+            label: 'Program title *',
+            placeholder: 'e.g. Soul Blueprint Intensive',
+            required: true,
+          },
+          {
+            name: 'subtitle',
+            label: 'Subtitle',
+            placeholder: 'e.g. 4-Week 1:1 Program',
+            required: false,
+          },
+        ].map(({ name, label, placeholder, required }) => (
+          <div key={name}>
+            <label className='input-label'>{label}</label>
+            <input
+              name={name}
+              className='input w-full'
+              style={inputStyle}
+              value={form[name as keyof ProgramFormState] as string}
+              onChange={handleChange}
+              placeholder={placeholder}
+              required={required}
+              onFocus={focusInput}
+              onBlur={blurInput}
+            />
+          </div>
+        ))}
 
         <div>
           <label className='input-label'>Description</label>
           <textarea
             name='description'
-            className='input min-h-[100px]'
+            className='input w-full min-h-[100px]'
+            style={inputStyle}
             value={form.description}
             onChange={handleChange}
             placeholder='Describe what this program offers…'
+            onFocus={focusInput}
+            onBlur={blurInput}
           />
         </div>
 
@@ -266,9 +318,12 @@ export default function ProgramForm({
             <label className='input-label'>Duration (weeks)</label>
             <select
               name='weeks'
-              className='input cursor-pointer'
+              className='input w-full cursor-pointer'
+              style={inputStyle}
               value={form.weeks}
               onChange={handleChange}
+              onFocus={focusInput}
+              onBlur={blurInput}
             >
               <option value={4}>4 weeks</option>
               <option value={8}>8 weeks</option>
@@ -279,10 +334,13 @@ export default function ProgramForm({
             <input
               name='price'
               type='number'
-              className='input'
+              className='input w-full'
+              style={inputStyle}
               value={form.price}
               onChange={handleChange}
               placeholder='5999'
+              onFocus={focusInput}
+              onBlur={blurInput}
             />
           </div>
           <div>
@@ -290,25 +348,31 @@ export default function ProgramForm({
             <input
               name='originalPrice'
               type='number'
-              className='input'
+              className='input w-full'
+              style={inputStyle}
               value={form.originalPrice}
               onChange={handleChange}
               placeholder='25000'
+              onFocus={focusInput}
+              onBlur={blurInput}
             />
           </div>
         </div>
       </div>
 
-      {/* What's included */}
-      <div style={{ borderRadius: '6px' }} className='card space-y-4'>
+      {/* ── What's Included ── */}
+      <div style={cardStyle} className='space-y-4'>
         <div className='flex items-center justify-between'>
-          <h2 className='font-serif text-base font-semibold text-ink-900'>
+          <h2
+            className='text-base font-semibold'
+            style={{ fontFamily: 'var(--font-serif)', color: 'var(--ink-900)' }}
+          >
             What&apos;s Included
           </h2>
           <button
             type='button'
             onClick={addInclude}
-            className='btn btn-soft btn-sm flex items-center gap-1.5'
+            className='btn btn-soft btn-sm inline-flex items-center gap-1.5'
           >
             <PlusIcon size={13} />
             Add item
@@ -319,17 +383,32 @@ export default function ProgramForm({
             <div key={i} className='flex items-center gap-2'>
               <input
                 className='input flex-1'
+                style={inputStyle}
                 value={item}
                 onChange={(e) => handleIncludeChange(i, e.target.value)}
                 placeholder={`Included item ${i + 1}`}
+                onFocus={focusInput}
+                onBlur={blurInput}
               />
               <button
                 type='button'
                 onClick={() => removeInclude(i)}
-                className='w-9 h-9 flex items-center justify-center rounded-sm
-                           border border-ink-100 text-ink-300
-                           hover:border-red-300 hover:text-red-400
+                className='w-9 h-9 flex items-center justify-center rounded-xl
                            transition-all duration-150 shrink-0'
+                style={{
+                  border: '1px solid var(--ink-100)',
+                  color: 'var(--ink-300)',
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.borderColor = '#fca5a5'
+                  el.style.color = '#ef4444'
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.borderColor = 'var(--ink-100)'
+                  el.style.color = 'var(--ink-300)'
+                }}
               >
                 <TrashIcon size={14} />
               </button>
@@ -338,19 +417,32 @@ export default function ProgramForm({
         </div>
       </div>
 
-      {/* Weekly modules */}
-      <div style={{ borderRadius: '6px' }} className='card space-y-4'>
-        <h2 className='font-serif text-base font-semibold text-ink-900'>
+      {/* ── Weekly Modules ── */}
+      <div style={cardStyle} className='space-y-4'>
+        <h2
+          className='text-base font-semibold'
+          style={{ fontFamily: 'var(--font-serif)', color: 'var(--ink-900)' }}
+        >
           Weekly Modules
         </h2>
         <div className='space-y-4'>
           {modules.map((mod, i) => (
             <div
               key={mod.weekNum}
-              className='border border-ink-100 rounded-sm p-4 space-y-3 bg-rose-50/40'
+              className='rounded-xl p-4 space-y-3'
+              style={{
+                border: '1px solid var(--ink-100)',
+                background: 'var(--pink-50)',
+              }}
             >
               <div className='flex items-center justify-between'>
-                <span className='text-xs font-semibold text-rose-500 uppercase tracking-wider'>
+                <span
+                  className='text-xs font-semibold uppercase tracking-wider'
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    color: 'var(--pink-400)',
+                  }}
+                >
                   Week {mod.weekNum}
                 </span>
                 <Toggle
@@ -360,18 +452,24 @@ export default function ProgramForm({
                 />
               </div>
               <input
-                className='input'
+                className='input w-full'
+                style={inputStyle}
                 value={mod.title}
                 onChange={(e) => handleModuleChange(i, 'title', e.target.value)}
                 placeholder={`Week ${mod.weekNum} title`}
+                onFocus={focusInput}
+                onBlur={blurInput}
               />
               <textarea
-                className='input min-h-[72px]'
+                className='input w-full min-h-[72px]'
+                style={inputStyle}
                 value={mod.description}
                 onChange={(e) =>
                   handleModuleChange(i, 'description', e.target.value)
                 }
                 placeholder='What will students learn this week?'
+                onFocus={focusInput}
+                onBlur={blurInput}
               />
             </div>
           ))}
@@ -383,7 +481,29 @@ export default function ProgramForm({
         <button
           type='submit'
           disabled={loading}
-          className='btn btn-primary flex items-center gap-2'
+          className='btn inline-flex items-center gap-2 disabled:opacity-40
+                     transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.02]
+                     active:scale-[0.97]'
+          style={{
+            fontFamily: 'var(--font-sans)',
+            background: 'var(--magenta-700)',
+            color: '#ffffff',
+            borderRadius: '99px',
+            padding: '10px 20px',
+            boxShadow: 'var(--shadow-card)',
+          }}
+          onMouseEnter={(e) => {
+            if (!loading) {
+              const el = e.currentTarget as HTMLElement
+              el.style.background = 'var(--magenta-600)'
+              el.style.boxShadow = 'var(--shadow-soft)'
+            }
+          }}
+          onMouseLeave={(e) => {
+            const el = e.currentTarget as HTMLElement
+            el.style.background = 'var(--magenta-700)'
+            el.style.boxShadow = 'var(--shadow-card)'
+          }}
         >
           {loading ? (
             <>
@@ -396,10 +516,30 @@ export default function ProgramForm({
             </>
           )}
         </button>
+
         <button
           type='button'
           onClick={() => router.back()}
-          className='btn btn-ghost'
+          className='btn inline-flex transition-all duration-200
+                     hover:-translate-y-0.5 active:scale-[0.97]'
+          style={{
+            fontFamily: 'var(--font-sans)',
+            background: 'transparent',
+            color: 'var(--ink-500)',
+            borderRadius: '99px',
+            padding: '10px 20px',
+            border: '1px solid var(--ink-100)',
+          }}
+          onMouseEnter={(e) => {
+            const el = e.currentTarget as HTMLElement
+            el.style.background = 'var(--bg-muted)'
+            el.style.borderColor = 'var(--pink-200)'
+          }}
+          onMouseLeave={(e) => {
+            const el = e.currentTarget as HTMLElement
+            el.style.background = 'transparent'
+            el.style.borderColor = 'var(--ink-100)'
+          }}
         >
           Cancel
         </button>

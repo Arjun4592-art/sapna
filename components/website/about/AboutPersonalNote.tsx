@@ -15,23 +15,58 @@ export default function AboutPersonalNote(): React.JSX.Element {
       <Divider />
       <div className='mt-10 max-w-2xl mx-auto text-center space-y-4 animate-[fadeUp_0.55s_ease_forwards]'>
         <SectionLabel>A Personal Note</SectionLabel>
-        <p className='text-sm text-ink-500 leading-relaxed font-light'>
-          {NOTE_PARA_1}
-        </p>
-        <p className='text-sm text-ink-500 leading-relaxed font-light'>
-          {NOTE_PARA_2}
-        </p>
-        <p className='text-sm text-ink-500 leading-relaxed font-light'>
-          {NOTE_PARA_3}
-        </p>
-        <blockquote className='border border-rose-100 bg-bg-muted rounded-xl px-8 py-6 mt-6'>
-          <p className='text-base italic text-ink-700 leading-relaxed font-serif'>
+
+        {[NOTE_PARA_1, NOTE_PARA_2, NOTE_PARA_3].map((para, i) => (
+          <p
+            key={i}
+            className='text-sm leading-relaxed font-light'
+            style={{ fontFamily: 'var(--font-sans)', color: 'var(--ink-500)' }}
+          >
+            {para}
+          </p>
+        ))}
+
+        {/* Blockquote */}
+        <blockquote
+          className='rounded-xl px-8 py-6 mt-6 text-left
+                     transition-all duration-300
+                     hover:shadow-[var(--shadow-soft)] hover:-translate-y-0.5'
+          style={{
+            border: '1px solid var(--pink-100)',
+            background: 'var(--bg-muted)',
+          }}
+          onMouseEnter={(e) => {
+            const el = e.currentTarget as HTMLElement
+            el.style.borderColor = 'var(--pink-200)'
+          }}
+          onMouseLeave={(e) => {
+            const el = e.currentTarget as HTMLElement
+            el.style.borderColor = 'var(--pink-100)'
+          }}
+        >
+          {/* Pink left accent */}
+          <div
+            className='w-8 h-0.5 mb-4 rounded-full'
+            style={{
+              background:
+                'linear-gradient(90deg, var(--pink-300), transparent)',
+            }}
+          />
+          <p
+            className='text-base italic leading-relaxed'
+            style={{ fontFamily: 'var(--font-serif)', color: 'var(--ink-700)' }}
+          >
             &ldquo;Whether someone is struggling with relationships, emotional
             pain, fear, self-worth, confusion, or repeating life patterns — my
             intention is to help them move towards clarity, healing, emotional
             freedom, and empowerment.&rdquo;
           </p>
-          <p className='text-xs text-ink-300 mt-3'>— Sapna Lamba</p>
+          <p
+            className='text-xs mt-3'
+            style={{ fontFamily: 'var(--font-sans)', color: 'var(--ink-300)' }}
+          >
+            — Sapna Lamba
+          </p>
         </blockquote>
       </div>
     </section>

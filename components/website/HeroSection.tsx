@@ -23,7 +23,10 @@ const TRUST_BADGES = [
 
 export default function HeroSection(): JSX.Element {
   return (
-    <section className='relative overflow-hidden min-h-[92vh] flex flex-col justify-center bg-bg-base'>
+    <section
+      className='relative overflow-hidden min-h-[92vh] flex flex-col justify-center'
+      style={{ background: 'var(--bg-base)' }}
+    >
       {/* ── Ambient orbs ── */}
       <div
         className='pointer-events-none absolute inset-0 overflow-hidden'
@@ -31,18 +34,21 @@ export default function HeroSection(): JSX.Element {
       >
         <div
           className='absolute -top-32 -left-32 h-[480px] w-[480px] rounded-full
-                        bg-rose-300/20 blur-[100px]
-                        animate-[orbFloat_12s_ease-in-out_infinite]'
+                     blur-[100px] opacity-25
+                     animate-[orbFloat_12s_ease-in-out_infinite]'
+          style={{ background: 'var(--pink-200)' }}
         />
         <div
           className='absolute -bottom-40 -right-20 h-[420px] w-[420px] rounded-full
-                        bg-gold-300/15 blur-[90px]
-                        animate-[orbFloat_10s_ease-in-out_infinite_reverse]'
+                     blur-[90px] opacity-20
+                     animate-[orbFloat_10s_ease-in-out_infinite_reverse]'
+          style={{ background: 'var(--pink-300)' }}
         />
         <div
           className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-                        h-72 w-72 rounded-full bg-burgundy-300/10 blur-[80px]
-                        animate-[orbFloat_14s_ease-in-out_3s_infinite]'
+                     h-72 w-72 rounded-full blur-[80px] opacity-15
+                     animate-[orbFloat_14s_ease-in-out_3s_infinite]'
+          style={{ background: 'var(--magenta-200)' }}
         />
       </div>
 
@@ -51,7 +57,7 @@ export default function HeroSection(): JSX.Element {
         className='pointer-events-none absolute inset-0 opacity-[0.025]'
         style={{
           backgroundImage:
-            'linear-gradient(var(--rose-400) 1px, transparent 1px), linear-gradient(90deg, var(--rose-400) 1px, transparent 1px)',
+            'linear-gradient(var(--pink-400) 1px, transparent 1px), linear-gradient(90deg, var(--pink-400) 1px, transparent 1px)',
           backgroundSize: '48px 48px',
         }}
         aria-hidden='true'
@@ -59,118 +65,211 @@ export default function HeroSection(): JSX.Element {
 
       <div className='relative z-10 max-w-3xl mx-auto px-5 sm:px-6 pt-16 sm:pt-20 pb-20 sm:pb-28'>
         <div className='flex flex-col items-center text-center'>
-          {/* Brand pill */}
+          {/* ── Brand pill ── */}
           <div
-            className='inline-flex items-center gap-2 bg-bg-surface/90 backdrop-blur-sm
-                        border border-rose-200 px-4 py-1.5 rounded-full mb-10
-                        shadow-[var(--shadow-card)] cursor-default
-                        hover:border-gold-300 hover:shadow-[var(--shadow-gold)]
-                        transition-all duration-300
-                        animate-[fadeUp_0.5s_ease_0.1s_both] opacity-0'
+            className='inline-flex items-center gap-2 backdrop-blur-sm
+                       px-4 py-1.5 rounded-full mb-10 cursor-default
+                       transition-all duration-300
+                       hover:scale-[1.03]
+                       animate-[fadeUp_0.5s_ease_0.1s_both] opacity-0'
+            style={{
+              background: 'rgba(255,255,255,0.9)',
+              border: '1px solid var(--pink-100)',
+              boxShadow: 'var(--shadow-card)',
+            }}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget as HTMLElement
+              el.style.borderColor = 'var(--pink-300)'
+              el.style.boxShadow = 'var(--shadow-soft)'
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget as HTMLElement
+              el.style.borderColor = 'var(--pink-100)'
+              el.style.boxShadow = 'var(--shadow-card)'
+            }}
           >
-            <span className='text-gold-400 animate-float'>
+            <span
+              className='animate-float'
+              style={{ color: 'var(--pink-400)' }}
+            >
               <SparkleIcon size={11} />
             </span>
-            <span className='text-[10px] font-semibold text-rose-500 uppercase tracking-[0.22em]'>
-              Soul Awakening Academy
+            <span
+              className='text-[10px] font-semibold uppercase tracking-[0.22em] px-5 py-2'
+              style={{
+                fontFamily: 'var(--font-sans)',
+                color: 'var(--pink-400)',
+              }}
+            >
+              Soul Awakening With Sapna
             </span>
           </div>
 
-          {/* Headline */}
+          {/* ── Headline ── */}
           <h1
-            className='font-serif text-ink-900 leading-[1.08]
-                       text-[2.6rem] sm:text-[3.4rem] lg:text-[4rem] mb-6
+            className='leading-[1.08] mb-6
+                       text-[2.6rem] sm:text-[3.4rem] lg:text-[4rem]
                        animate-[fadeUp_0.6s_ease_0.2s_both] opacity-0'
+            style={{ fontFamily: 'var(--font-serif)', color: 'var(--ink-900)' }}
           >
             You keep trying.
             <br />
             <span className='italic relative'>
-              <span className='text-rose-500'>The same pain</span> keeps
-              winning.
+              <span style={{ color: 'var(--pink-400)' }}>The same pain</span>{' '}
+              keeps winning.
             </span>
           </h1>
 
-          {/* Subheadline */}
+          {/* ── Subheadline ── */}
           <p
-            className='text-lg sm:text-xl text-ink-500 max-w-lg leading-relaxed mb-3 font-light
+            className='text-lg sm:text-xl max-w-lg leading-relaxed mb-3 font-light
                        animate-[fadeUp_0.6s_ease_0.3s_both] opacity-0'
+            style={{ fontFamily: 'var(--font-sans)', color: 'var(--ink-500)' }}
           >
             New year. New partner. New job.{' '}
-            <span className='text-ink-700 font-normal'>
+            <span style={{ color: 'var(--ink-700)', fontWeight: 400 }}>
               Same story. Same heartbreak.
             </span>
           </p>
 
+          {/* ── Body copy ── */}
           <p
-            className='text-sm sm:text-[15px] text-ink-400 max-w-md leading-relaxed mb-11
+            className='text-sm sm:text-[15px] max-w-md leading-relaxed mb-11
                        animate-[fadeUp_0.6s_ease_0.38s_both] opacity-0'
+            style={{ fontFamily: 'var(--font-sans)', color: 'var(--ink-400)' }}
           >
             The pattern isn&apos;t a coincidence — it&apos;s a soul-level
             blueprint. Through{' '}
-            <span className='text-rose-500 font-medium'>
+            <span style={{ color: 'var(--pink-400)', fontWeight: 500 }}>
               Akashic Record Reading
             </span>{' '}
             and{' '}
-            <span className='text-rose-500 font-medium'>
+            <span style={{ color: 'var(--pink-400)', fontWeight: 500 }}>
               Life &amp; Relationship Coaching
             </span>
             , we go to the root. And we rewrite it.
           </p>
 
-          {/* CTAs */}
+          {/* ── CTAs ── */}
           <div
             className='flex flex-col sm:flex-row items-center gap-3 mb-14
                        w-full sm:w-auto px-4 sm:px-0
                        animate-[fadeUp_0.6s_ease_0.46s_both] opacity-0'
           >
+            {/* Primary */}
             <Link href='/login' className='w-full sm:w-auto'>
               <span
-                className='btn btn-primary btn-lg w-full sm:w-auto inline-flex
-                           shadow-[0_8px_28px_rgba(107,45,62,0.28)]
-                           hover:shadow-[0_12px_36px_rgba(107,45,62,0.38)]
-                           hover:-translate-y-1 hover:scale-[1.02]
-                           active:scale-[0.97]
-                           transition-all duration-200'
+                className='btn btn-lg w-full sm:w-auto inline-flex
+                           transition-all duration-200
+                           hover:-translate-y-1 hover:scale-[1.03]
+                           active:scale-[0.97]'
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  background: 'var(--magenta-700)',
+                  color: '#ffffff',
+                  borderRadius: '99px',
+                  boxShadow: '0 8px 28px rgba(138, 26, 92, 0.28)',
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.background = 'var(--magenta-600)'
+                  el.style.boxShadow = '0 12px 36px rgba(138, 26, 92, 0.42)'
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.background = 'var(--magenta-700)'
+                  el.style.boxShadow = '0 8px 28px rgba(138, 26, 92, 0.28)'
+                }}
               >
                 Begin Your Healing
                 <ChevronRightIcon size={15} />
               </span>
             </Link>
+
+            {/* Ghost */}
             <a href='#programs' className='w-full sm:w-auto'>
               <span
-                className='btn btn-ghost btn-lg w-full sm:w-auto inline-flex
-                           hover:-translate-y-0.5 transition-all duration-200'
+                className='btn btn-lg w-full sm:w-auto inline-flex
+                           transition-all duration-200
+                           hover:-translate-y-0.5
+                           active:scale-[0.97]'
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  background: 'transparent',
+                  color: 'var(--ink-500)',
+                  borderRadius: '99px',
+                  border: '1px solid var(--ink-100)',
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.background = 'var(--bg-muted)'
+                  el.style.borderColor = 'var(--pink-200)'
+                  el.style.color = 'var(--ink-900)'
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.background = 'transparent'
+                  el.style.borderColor = 'var(--ink-100)'
+                  el.style.color = 'var(--ink-500)'
+                }}
               >
                 See Programs
               </span>
             </a>
           </div>
 
-          {/* Stats row */}
+          {/* ── Stats row ── */}
           <div
             className='flex flex-wrap items-center justify-center gap-x-10 gap-y-5 mb-11
-                       px-8 py-5 rounded-2xl
-                       bg-bg-surface/80 border border-rose-100
-                       backdrop-blur-sm shadow-[var(--shadow-card)]
-                       hover:border-gold-200 hover:shadow-[var(--shadow-soft)]
+                       px-8 py-5 rounded-2xl backdrop-blur-sm
                        transition-all duration-300
                        animate-[fadeUp_0.6s_ease_0.54s_both] opacity-0'
+            style={{
+              background: 'rgba(255,255,255,0.8)',
+              border: '1px solid var(--pink-100)',
+              boxShadow: 'var(--shadow-card)',
+            }}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget as HTMLElement
+              el.style.borderColor = 'var(--pink-200)'
+              el.style.boxShadow = 'var(--shadow-soft)'
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget as HTMLElement
+              el.style.borderColor = 'var(--pink-100)'
+              el.style.boxShadow = 'var(--shadow-card)'
+            }}
           >
-            {STATS.map(({ value, label }, i) => (
+            {STATS.map(({ value, label }) => (
               <div
                 key={label}
                 className='flex flex-col items-center group cursor-default'
               >
                 <span
-                  className='font-serif text-3xl text-burgundy-600 leading-none
-                             group-hover:text-gold-500 transition-colors duration-200'
+                  className='text-3xl leading-none transition-colors duration-200'
+                  style={{
+                    fontFamily: 'var(--font-serif)',
+                    color: 'var(--magenta-600)',
+                  }}
+                  onMouseEnter={(e) =>
+                    ((e.currentTarget as HTMLElement).style.color =
+                      'var(--pink-400)')
+                  }
+                  onMouseLeave={(e) =>
+                    ((e.currentTarget as HTMLElement).style.color =
+                      'var(--magenta-600)')
+                  }
                 >
                   {value}
                 </span>
                 <span
-                  className='text-[10px] font-semibold uppercase tracking-[0.18em]
-                             text-ink-400 mt-1.5 group-hover:text-ink-600
-                             transition-colors duration-200'
+                  className='text-[10px] font-semibold uppercase tracking-[0.18em] mt-1.5
+                             transition-colors duration-200
+                             group-hover:text-[var(--ink-600)]'
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    color: 'var(--ink-400)',
+                  }}
                 >
                   {label}
                 </span>
@@ -178,7 +277,7 @@ export default function HeroSection(): JSX.Element {
             ))}
           </div>
 
-          {/* Trust badges */}
+          {/* ── Trust badges ── */}
           <div
             className='flex flex-wrap items-center justify-center gap-x-6 gap-y-2
                        animate-[fadeUp_0.6s_ease_0.62s_both] opacity-0'
@@ -186,16 +285,33 @@ export default function HeroSection(): JSX.Element {
             {TRUST_BADGES.map((badge, i) => (
               <div
                 key={badge}
-                className='flex items-center gap-2 text-xs text-ink-400 group cursor-default'
+                className='flex items-center gap-2 group cursor-default'
               >
                 <span
-                  className='h-1.5 w-1.5 rounded-full bg-gold-400
-                             group-hover:bg-rose-400 group-hover:scale-125
-                             transition-all duration-200
+                  className='h-1.5 w-1.5 rounded-full transition-all duration-200
+                             group-hover:scale-125
                              animate-[sparklePop_2.5s_ease-in-out_infinite]'
-                  style={{ animationDelay: `${i * 0.7}s` }}
+                  style={{
+                    background: 'var(--pink-300)',
+                    animationDelay: `${i * 0.7}s`,
+                  }}
+                  onMouseEnter={(e) =>
+                    ((e.currentTarget as HTMLElement).style.background =
+                      'var(--pink-400)')
+                  }
+                  onMouseLeave={(e) =>
+                    ((e.currentTarget as HTMLElement).style.background =
+                      'var(--pink-300)')
+                  }
                 />
-                <span className='group-hover:text-ink-700 transition-colors duration-200'>
+                <span
+                  className='text-xs transition-colors duration-200
+                             group-hover:text-[var(--ink-700)]'
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    color: 'var(--ink-400)',
+                  }}
+                >
                   {badge}
                 </span>
               </div>
@@ -204,17 +320,23 @@ export default function HeroSection(): JSX.Element {
         </div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* ── Scroll indicator ── */}
       <div
         className='hidden sm:flex absolute bottom-6 inset-x-0 flex-col items-center gap-2
                    animate-[fadeIn_0.7s_ease_1.8s_forwards] opacity-0'
       >
-        <span className='text-[9px] uppercase tracking-[0.28em] text-ink-300'>
+        <span
+          className='text-[9px] uppercase tracking-[0.28em]'
+          style={{ fontFamily: 'var(--font-sans)', color: 'var(--ink-300)' }}
+        >
           Scroll
         </span>
         <span
-          className='block h-7 w-px bg-gradient-to-b from-gold-400/80 to-transparent
-                         animate-[float_1.4s_ease-in-out_infinite]'
+          className='block h-7 w-px animate-[float_1.4s_ease-in-out_infinite]'
+          style={{
+            background:
+              'linear-gradient(to bottom, var(--pink-300), transparent)',
+          }}
         />
       </div>
     </section>

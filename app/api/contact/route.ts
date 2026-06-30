@@ -3,6 +3,21 @@ import nodemailer from 'nodemailer'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from '@/lib/firebase/config'
 
+// Blossom Pink palette — hex (email clients don't support CSS vars)
+const C = {
+  bgDark: '#3a0a2a', // --magenta-700
+  bgLight: '#fff0fb', // --pink-50
+  bgCard: '#fdf5fc', // --bg-muted
+  border: '#f9d8f2', // --pink-100
+  accent: '#c4388a', // --pink-400
+  accentSoft: '#e060c0', // --pink-300
+  textDark: '#2a0a20', // --ink-900
+  textMid: '#5c3050', // --ink-500
+  textMuted: '#8b5a80', // --ink-400
+  textLight: '#f9d8f2', // --pink-100
+  white: '#ffffff',
+}
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -33,25 +48,29 @@ export async function POST(req: NextRequest) {
       createdAt: serverTimestamp(),
     })
 
-    // Notify Sapna
+    // ── Notify Sapna ──────────────────────────────────────────────────────────
     await transporter.sendMail({
       from: `"Soul Awakening Academy" <${process.env.GMAIL_USER}>`,
       to: process.env.GMAIL_USER,
       subject: `New inquiry from ${name}`,
       html: `
         <div style="font-family:system-ui,sans-serif;max-width:520px;
-                    margin:0 auto;padding:32px 20px;">
-          <div style="background:#1A1412;border-radius:12px;padding:20px 24px;
-                      margin-bottom:24px;">
-            <p style="color:#C2847A;font-size:11px;letter-spacing:0.2em;
-                      text-transform:uppercase;margin:0 0 6px">
+                    margin:0 auto;padding:32px 20px;background:${C.bgLight};">
+
+          <!-- Header -->
+          <div style="background:${C.bgDark};border-radius:12px;
+                      padding:20px 24px;margin-bottom:24px;">
+            <p style="color:${C.accentSoft};font-size:11px;letter-spacing:0.2em;
+                      text-transform:uppercase;margin:0 0 6px;font-family:system-ui,sans-serif;">
               Soul Awakening Academy
             </p>
-            <h2 style="color:#FDFAF5;margin:0;font-size:18px;font-weight:400;">
+            <h2 style="color:${C.white};margin:0;font-size:18px;font-weight:400;
+                       font-family:Georgia,serif;">
               New contact inquiry
             </h2>
           </div>
 
+          <!-- Fields table -->
           <table style="width:100%;border-collapse:collapse;">
             ${[
               ['Name', name],
@@ -62,12 +81,14 @@ export async function POST(req: NextRequest) {
               .map(
                 ([label, value]) => `
               <tr>
-                <td style="padding:10px 0;border-bottom:1px solid #EDD9D4;
-                           font-size:12px;color:#9B8B85;width:100px;">
+                <td style="padding:10px 0;border-bottom:1px solid ${C.border};
+                           font-size:12px;color:${C.textMuted};width:100px;
+                           font-family:system-ui,sans-serif;">
                   ${label}
                 </td>
-                <td style="padding:10px 0;border-bottom:1px solid #EDD9D4;
-                           font-size:13px;color:#1A1412;font-weight:500;">
+                <td style="padding:10px 0;border-bottom:1px solid ${C.border};
+                           font-size:13px;color:${C.textDark};font-weight:500;
+                           font-family:system-ui,sans-serif;">
                   ${value}
                 </td>
               </tr>
@@ -76,18 +97,22 @@ export async function POST(req: NextRequest) {
               .join('')}
           </table>
 
-          <div style="background:#FFF8F5;border:1px solid #EDD9D4;
+          <!-- Message box -->
+          <div style="background:${C.bgCard};border:1px solid ${C.border};
                       border-radius:10px;padding:16px;margin-top:20px;">
-            <p style="font-size:11px;color:#9B8B85;text-transform:uppercase;
-                      letter-spacing:0.15em;margin:0 0 8px">
+            <p style="font-size:11px;color:${C.textMuted};text-transform:uppercase;
+                      letter-spacing:0.15em;margin:0 0 8px;font-family:system-ui,sans-serif;">
               Message
             </p>
-            <p style="font-size:14px;color:#3D2E2A;line-height:1.7;margin:0;">
+            <p style="font-size:14px;color:${C.textDark};line-height:1.7;margin:0;
+                      font-family:system-ui,sans-serif;">
               ${message}
             </p>
           </div>
 
-          <p style="font-size:12px;color:#B8AE98;margin-top:20px;">
+          <!-- Footer -->
+          <p style="font-size:12px;color:${C.textMuted};margin-top:20px;
+                    font-family:system-ui,sans-serif;">
             Reply directly to this email to respond to ${name}.
           </p>
         </div>
@@ -95,41 +120,52 @@ export async function POST(req: NextRequest) {
       replyTo: email,
     })
 
-    // Auto-reply to user
+    // ── Auto-reply to user ────────────────────────────────────────────────────
     await transporter.sendMail({
       from: `"Sapna Lamba" <${process.env.GMAIL_USER}>`,
       to: email,
       subject: 'Thank you for reaching out ✦',
       html: `
         <div style="font-family:system-ui,sans-serif;max-width:480px;
-                    margin:0 auto;padding:40px 20px;">
-          <div style="background:#1A1412;border-radius:12px;padding:24px;
+                    margin:0 auto;padding:40px 20px;background:${C.bgLight};">
+
+          <!-- Header -->
+          <div style="background:${C.bgDark};border-radius:12px;padding:24px;
                       text-align:center;margin-bottom:24px;">
-            <p style="color:#C2847A;font-size:11px;letter-spacing:0.2em;
-                      text-transform:uppercase;margin:0 0 8px">
+            <p style="color:${C.accentSoft};font-size:11px;letter-spacing:0.2em;
+                      text-transform:uppercase;margin:0 0 8px;
+                      font-family:system-ui,sans-serif;">
               Soul Awakening Academy
             </p>
-            <h1 style="color:#FDFAF5;font-size:20px;margin:0;
-                       font-weight:400;font-style:italic;">
+            <h1 style="color:${C.white};font-size:20px;margin:0;
+                       font-weight:400;font-style:italic;font-family:Georgia,serif;">
               Thank you, ${name} ✦
             </h1>
           </div>
 
-          <div style="background:#FFF8F5;border:1px solid #EDD9D4;
+          <!-- Body card -->
+          <div style="background:${C.bgCard};border:1px solid ${C.border};
                       border-radius:12px;padding:28px;">
-            <p style="color:#7B6F69;font-size:14px;line-height:1.8;
-                      margin:0 0 16px;">
+            <p style="color:${C.textMid};font-size:14px;line-height:1.8;
+                      margin:0 0 16px;font-family:system-ui,sans-serif;">
               I have received your message and will get back to you
               within 24–48 hours.
             </p>
-            <p style="color:#7B6F69;font-size:14px;line-height:1.8;margin:0;">
+            <p style="color:${C.textMid};font-size:14px;line-height:1.8;
+                      margin:0;font-family:system-ui,sans-serif;">
               In the meantime, know that reaching out is already a
               beautiful step toward your healing journey.
             </p>
           </div>
 
-          <p style="text-align:center;font-size:13px;color:#B8AE98;
-                    margin-top:24px;font-style:italic;">
+          <!-- Accent line -->
+          <div style="text-align:center;margin-top:20px;">
+            <span style="color:${C.accent};font-size:14px;">✦</span>
+          </div>
+
+          <!-- Signature -->
+          <p style="text-align:center;font-size:13px;color:${C.textMuted};
+                    margin-top:12px;font-style:italic;font-family:Georgia,serif;">
             — Sapna Lamba, Soul Awakening Academy
           </p>
         </div>

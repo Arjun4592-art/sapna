@@ -47,57 +47,148 @@ const TOOLS: string[] = [
 
 export default function AboutProcess(): React.JSX.Element {
   return (
-    <section className='section bg-bg-surface rounded-2xl border border-rose-100 mx-4 sm:mx-6 lg:mx-auto max-w-5xl mt-16 mb-16 relative shadow-card overflow-hidden'>
+    <section
+      className='section rounded-2xl mx-4 sm:mx-6 lg:mx-auto max-w-5xl mt-16 mb-16 relative overflow-hidden'
+      style={{
+        background: 'var(--bg-surface)',
+        border: '1px solid var(--pink-100)',
+        boxShadow: 'var(--shadow-card)',
+      }}
+    >
+      {/* ── Ambient orb ── */}
       <div
-        className='pointer-events-none absolute -top-20 -left-20 w-64 h-64 rounded-full bg-rose-100 opacity-50 blur-[70px]'
+        className='pointer-events-none absolute -top-20 -left-20 w-64 h-64 rounded-full blur-[70px] opacity-40 animate-[orbFloat_10s_ease-in-out_infinite]'
+        style={{ background: 'var(--pink-100)' }}
         aria-hidden='true'
       />
 
+      {/* ── Heading ── */}
       <div className='relative z-10 mb-12'>
         <SectionHeading
           eyebrow='The Two-Step Process'
           title={
             <>
               Finding the root cause is{' '}
-              <span className='italic text-rose-400'>only the first step</span>
+              <span className='italic' style={{ color: 'var(--pink-400)' }}>
+                only the first step
+              </span>
             </>
           }
           description='Once we understand WHY a certain problem exists at the soul level, the next step is: how do we heal it and transform it in our everyday human life? That is where practical transformation work comes in, because most people struggle majorly in three core areas of life — Health, Wealth, and Relationships.'
         />
       </div>
 
+      {/* ── Process steps ── */}
       <div className='relative z-10 grid grid-cols-1 md:grid-cols-2 gap-5 mb-10 stagger-children'>
         {PROCESS_STEPS.map(({ step, title, desc }) => (
           <div
             key={step}
-            className='flex gap-4 p-5 bg-bg-muted border border-rose-100 rounded-xl hover:border-rose-200 hover:shadow-soft hover:-translate-y-1 transition-all duration-200 cursor-default'
+            className='flex gap-4 p-5 rounded-xl cursor-default
+                       transition-all duration-200 hover:-translate-y-1'
+            style={{
+              background: 'var(--bg-muted)',
+              border: '1px solid var(--pink-100)',
+            }}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget as HTMLElement
+              el.style.borderColor = 'var(--pink-200)'
+              el.style.boxShadow = 'var(--shadow-soft)'
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget as HTMLElement
+              el.style.borderColor = 'var(--pink-100)'
+              el.style.boxShadow = 'none'
+            }}
           >
-            <div className='w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center flex-shrink-0 font-serif text-sm font-bold text-rose-500'>
+            {/* Step number orb */}
+            <div
+              className='w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0
+                         text-sm font-bold transition-all duration-200'
+              style={{
+                fontFamily: 'var(--font-serif)',
+                background: 'var(--pink-100)',
+                color: 'var(--pink-500)',
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLElement
+                el.style.background = 'var(--pink-200)'
+                el.style.color = 'var(--magenta-600)'
+                el.style.transform = 'scale(1.1)'
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLElement
+                el.style.background = 'var(--pink-100)'
+                el.style.color = 'var(--pink-500)'
+                el.style.transform = 'scale(1)'
+              }}
+            >
               {step}
             </div>
+
             <div>
-              <p className='text-sm font-semibold text-ink-900 mb-1'>{title}</p>
-              <p className='text-xs text-ink-400 leading-relaxed'>{desc}</p>
+              <p
+                className='text-sm font-semibold mb-1'
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  color: 'var(--ink-900)',
+                }}
+              >
+                {title}
+              </p>
+              <p
+                className='text-xs leading-relaxed'
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  color: 'var(--ink-400)',
+                }}
+              >
+                {desc}
+              </p>
             </div>
           </div>
         ))}
       </div>
 
-      <div className='relative z-10 pt-8 border-t border-rose-100'>
-        <p className='text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-rose-400 mb-4'>
+      {/* ── Tools section ── */}
+      <div
+        className='relative z-10 pt-8'
+        style={{ borderTop: '1px solid var(--pink-100)' }}
+      >
+        <p
+          className='text-center text-[11px] font-semibold uppercase tracking-[0.22em] mb-4'
+          style={{ fontFamily: 'var(--font-sans)', color: 'var(--pink-400)' }}
+        >
           That is why I combine Akashic Record Readings with
         </p>
+
         <div className='flex flex-wrap gap-2 justify-center stagger-children'>
           {TOOLS.map((tool) => (
             <span
               key={tool}
-              className='badge badge-rose text-[11px] cursor-default hover:scale-105 transition-transform duration-150'
+              className='badge badge-rose text-[11px] cursor-default
+                         transition-all duration-150 hover:scale-105 hover:-translate-y-0.5'
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLElement
+                el.style.background = 'var(--pink-200)'
+                el.style.borderColor = 'var(--pink-300)'
+                el.style.color = 'var(--magenta-700)'
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLElement
+                el.style.background = ''
+                el.style.borderColor = ''
+                el.style.color = ''
+              }}
             >
               {tool}
             </span>
           ))}
         </div>
-        <p className='text-center text-sm text-ink-400 mt-6 font-light italic'>
+
+        <p
+          className='text-center text-sm mt-6 font-light italic'
+          style={{ fontFamily: 'var(--font-sans)', color: 'var(--ink-400)' }}
+        >
           This combination helps clients not only understand their patterns but
           also actively work on changing them. Because awareness without action
           cannot create transformation.
